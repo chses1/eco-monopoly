@@ -210,6 +210,41 @@
 </div>
 <script>
 
+function moveSteps(steps) {
+  if (steps <= 0) {
+    currentPlayer = 1 - currentPlayer;
+    updateTeacherTip();
+    document.getElementById("roll-btn").disabled = false;
+    document.getElementById("roll-btn-duplicate").disabled = false;
+    return;
+  }
+
+  positions[currentPlayer]++;
+  if (positions[currentPlayer] >= boardSize) positions[currentPlayer] = boardSize - 1;
+  updateBoard();
+  updateTeacherTip();
+
+  const currentEvent = layout[positions[currentPlayer]];
+  const currentCell = document.getElementById(`cell-${positions[currentPlayer]}`);
+  if (specialMove.hasOwnProperty(currentEvent)) {
+    const stepsMove = specialMove[currentEvent];
+    if (stepsMove === "start") {
+      positions[currentPlayer] = 0;
+    } else {
+      positions[currentPlayer] += stepsMove;
+      if (positions[currentPlayer] < 0) positions[currentPlayer] = 0;
+    }
+    updateBoard();
+    updateTeacherTip();
+  } else if (currentEvent === "暫停一次") {
+    skipTurn[currentPlayer] = true;
+    document.getElementById('action-icon').innerHTML = '⏸️ 暫停一回合！';
+  }
+
+  setTimeout(() => moveSteps(steps - 1), 600);
+}
+
+
 function updateTeacherTip() {
   const tipEl = document.getElementById('teacher-tip');
   const icon = currentPlayer === 0 
@@ -388,9 +423,16 @@ if (scores[currentPlayer] >= 3) {
   showWinScreen();
   positions = [0, 0];
   scores = [0, 0];
+  updateBoard();
+  updateTeacherTip();
+  return;
 } else {
   showScorePopup(playerName);
   showScoreAnimation();
+  const remainingSteps = newPos - (boardSize - 1);
+  positions[currentPlayer] = 0;
+  updateBoard();
+  setTimeout(() => moveSteps(remainingSteps), 800);
 }
 
         if (scores[currentPlayer] >= 3) {
