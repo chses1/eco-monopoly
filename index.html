@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>環保小尖兵大富翁</title>
+  <style>
+    body {
+      font-family: "Noto Sans TC", sans-serif;
+      background: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      max-width: 1200px;
+      margin: 2rem auto;
+      gap: 4px;
+    }
+    .cell {
+      background: white;
+      border: 1px solid #ccc;
+      min-height: 100px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.95rem;
+    }
+    .token {
+      width: 28px;
+      height: 28px;
+      margin-top: 4px;
+    }
+    #question-box {
+      margin-top: 1rem;
+    }
+    #question-options {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    #scoreboard {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 1rem;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌱 環保小尖兵大富翁</h1>
+  <div id="scoreboard">
+    <div><img src="player1.png" class="token"> 藍鵲：<span id="score0">0</span> 分</div>
+    <div><img src="player2.png" class="token"> 綠繡眼：<span id="score1">0</span> 分</div>
+  </div>
+  <div class="board" id="board"></div>
+
+  <div id="question-box" style="display: none;">
+    <p id="question"></p>
+    <div id="question-options">
+      <button id="btn-correct">⭕ 答對</button>
+      <button id="btn-wrong">❌ 答錯</button>
+    </div>
+  </div>
+
+  <audio id="audio-correct" src="correct.mp3" preload="auto"></audio>
+  <audio id="audio-wrong" src="wrong.mp3" preload="auto"></audio>
+
+  <script>
+    const questions = [
+      "說出塑膠對海洋生物的傷害",
+      "怎麼保護動物",
+      "怎麼節約用水",
+      "你拿什麼製作環保清潔劑",
+      "說出空氣污染對人體的傷害",
+      "說出一個暖化對地球的傷害",
+      "用過的紙盒還可以做什麼",
+      "洗米水還可以拿來做什麼",
+      "舉出一種減塑的方法",
+      "說出一種低污染的交通工具",
+      "亂砍樹木會發生什麼事",
+      "節電行動：關閉一盞電風扇",
+      "說出一種台灣特有種動物",
+      "台灣減塑有什麼規定",
+      "前進兩步",
+      "回到起點",
+      "前進三步",
+      "後退兩步",
+      "後退兩步",
+      "前進一步",
+      "吹冷氣會造成地球暖化嗎",
+      "你參加過跳蚤市場嗎",
+      "冰山融化會傷害什麼動物",
+      "我們怎麼愛護山林",
+      "走路上學可以減少空汙嗎",
+      "後退一步",
+      "怎麼愛惜食物",
+      "暫停一次",
+      "說出一種瀕臨絕種的動物",
+      "終點"
+    ];
+
+    const board = document.getElementById("board");
+    const questionBox = document.getElementById("question-box");
+    const questionText = document.getElementById("question");
+    const positions = [0, 0];
+    const scores = [0, 0];
+    let currentPlayer = 0;
+
+    const playerImages = [
+      'player1.png', // 藍鵲
+      'player2.png'  // 綠繡眼
+    ];
+
+    // 初始化格子
+    questions.forEach((q, i) => {
+      const div = document.createElement("div");
+      div.className = "cell";
+      div.id = "cell-" + i;
+      div.textContent = q;
+      board.appendChild(div);
+    });
+
+    function updateBoard() {
+      questions.forEach((_, i) => {
+        const cell = document.getElementById("cell-" + i);
+        cell.querySelectorAll("img").forEach(e => e.remove());
+      });
+
+      positions.forEach((pos, idx) => {
+        const img = document.createElement("img");
+        img.src = playerImages[idx];
+        img.className = "token";
+        document.getElementById("cell-" + pos).appendChild(img);
+      });
+
+      document.getElementById("score0").innerText = scores[0];
+      document.getElementById("score1").innerText = scores[1];
+    }
+
+    function playSound(correct) {
+      const correctAudio = document.getElementById("audio-correct");
+      const wrongAudio = document.getElementById("audio-wrong");
+      [correctAudio, wrongAudio].forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+      });
+      const audio = correct ? correctAudio : wrongAudio;
+      if (audio) audio.play();
+    }
+
+    function handleAnswer(correct) {
+      playSound(correct);
+      questionBox.style.display = "none";
+      if (!correct) {
+        positions[currentPlayer] = Math.max(positions[currentPlayer] - 1, 0);
+      }
+      if (positions[currentPlayer] === questions.length - 1) {
+        scores[currentPlayer]++;
+        alert((currentPlayer === 0 ? "藍鵲" : "綠繡眼") + " 得分！");
+
+        if (scores[currentPlayer] === 3) {
+          alert((currentPlayer === 0 ? "藍鵲" : "綠繡眼") + " 獲勝！");
+          scores[0] = 0;
+          scores[1] = 0;
+        }
+
+        positions[currentPlayer] = 0;
+      } else {
+        currentPlayer = 1 - currentPlayer;
+      }
+      updateBoard();
+    }
+
+    // 初始圖像
+    updateBoard();
+  </script>
+</body>
+</html>
