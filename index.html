@@ -186,8 +186,9 @@
 <h1 style="font-size: 4rem; color: #ffeb3b; text-shadow: 3px 3px 6px #000; font-weight: bold; margin-bottom: 20px;">🌏 環保小尖兵大富翁 🌿</h1>
 <div class="container">
 <div style="flex: 0 0 400px; display: flex; flex-direction: column; align-items: center; gap: 20px; font-size: 2rem; margin-top: 20px; background-color: rgba(255,255,255,0.85); padding: 20px; border-radius: 10px;">
+<div id="teacher-tip" style="font-size: 2.4rem; font-weight: bold; color: darkorange; text-align: center;">👉 現在輪到藍鵲擲骰子</div>
 <button id="roll-btn" onclick="rollDice()" style="display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 3 / 1; font-size: 2.4rem; padding: 0; border-radius: 20px; background: #ffeb3b; border: 3px solid #333; white-space: nowrap;">🎲 擲骰子</button><div id="dice-animation" style="font-size: 5rem; text-align: center; height: 80px; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #d32f2f;">🎲 1</div>
-<p id="status" style="font-size: 1.6rem; font-weight: bold; min-height: 2.2rem; white-space: nowrap; color: red;"></p>
+<p id="status" style="font-size: 2.4rem; font-weight: bold; min-height: 2.2rem; white-space: nowrap; color: red;"></p>
 <div id="question-box" style="display:none; max-width: 90vw; padding: 10px; background-color: rgba(255, 255, 255, 0.9); border-radius: 10px; font-size: 1.4rem;">
 <p id="question"></p>
 <div class="decision-buttons">
@@ -199,7 +200,7 @@
 </div>
 <div class="board" id="board"></div>
 <div style="flex: 0 0 400px; display: flex; flex-direction: column; align-items: center; gap: 20px; font-size: 2rem; margin-top: 20px; background-color: rgba(255,255,255,0.85); padding: 20px; border-radius: 10px;">
-<div style="font-size: 1.6rem; font-weight: bold; margin-bottom: 10px;">🎯 分數統計</div>
+<div style="font-size: 2.4rem; font-weight: bold; margin-bottom: 10px;">🎯 分數統計</div>
 <div style="background: #e0f7fa; padding: 10px 20px; border-radius: 8px; width: calc(100% - 10px); text-align: left; box-sizing: border-box;"><img alt="藍鵲" src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player1.png" style="width:48px; vertical-align:middle; margin-right:6px;"/>藍鵲： <span id="score-blue">0</span> 分</div>
 <div style="background: #e8eaf6; padding: 10px 20px; border-radius: 8px; width: calc(100% - 10px); text-align: left; box-sizing: border-box;"><img alt="綠繡眼" src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player2.png" style="width:48px; vertical-align:middle; margin-right:6px;"/>綠繡眼： <span id="score-green">0</span> 分</div>
 <div style="margin-top: 20px; font-size: 1.2rem; line-height: 1.6;">
@@ -208,6 +209,21 @@
 <button id="roll-btn-duplicate" onclick="rollDice()" style="display: block; width: 100%; margin-top: 12px; padding: 10px; font-size: 1.8rem; border-radius: 12px; background: #ffeb3b; border: 3px solid #333; box-sizing: border-box;">🎲 擲骰子</button><div id="dice-animation-2" style="font-size: 5rem; text-align: center; height: 80px; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #d32f2f;">🎲 1</div></div>
 </div>
 <script>
+
+function updateTeacherTip() {
+  const tipEl = document.getElementById('teacher-tip');
+  const icon = currentPlayer === 0 
+    ? '<img src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player2.png" style="width: 48px; vertical-align: middle; margin-right: 6px;">'
+    : '<img src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player1.png" style="width: 48px; vertical-align: middle; margin-right: 6px;">';
+  const name = currentPlayer === 0 
+    ? '<span style="color: limegreen; font-weight: bold;">綠繡眼</span>'
+    : '<span style="color: deepskyblue; font-weight: bold;">藍鵲</span>';
+  tipEl.innerHTML = `👉 輪到 ${icon}${name} 擲骰子`;
+
+  const tipText = currentPlayer === 0 ? '👉 現在輪到綠繡眼擲骰子' : '👉 現在輪到藍鵲擲骰子';
+  
+}
+
     const layout = [
   "起點",
   "你參加過跳蚤市場嗎說出",
@@ -331,11 +347,13 @@ if (skipTurn[currentPlayer]) {
   skipTurn[currentPlayer] = false;
   document.getElementById('action-icon').innerHTML = '⏸️ 暫停一回合！';
   currentPlayer = 1 - currentPlayer;
+  updateTeacherTip();
   if (rollBtn) if (rollBtn) rollBtn.disabled = false;
 if (rollBtn2) rollBtn2.disabled = false;
 if (rollBtn2) rollBtn2.disabled = false;
   return;
 currentPlayer = 1 - currentPlayer;
+  updateTeacherTip();
         if (rollBtn) if (rollBtn) rollBtn.disabled = false;
 if (rollBtn2) rollBtn2.disabled = false;
 if (rollBtn2) rollBtn2.disabled = false;
@@ -391,6 +409,8 @@ document.body.appendChild(overlay);
           positions[currentPlayer] = 0;
         }
         updateBoard();
+  updateTeacherTip();
+  updateTeacherTip();
         if (rollBtn) if (rollBtn) rollBtn.disabled = false;
 if (rollBtn2) rollBtn2.disabled = false;
 if (rollBtn2) rollBtn2.disabled = false;
@@ -398,6 +418,8 @@ if (rollBtn2) rollBtn2.disabled = false;
       }
       positions[currentPlayer] = newPos;
       updateBoard();
+  updateTeacherTip();
+  updateTeacherTip();
       const currentEvent = layout[newPos];
       const currentCell = document.getElementById(`cell-${newPos}`);
       if (specialMove.hasOwnProperty(currentEvent) || currentEvent === '暫停一次') {
@@ -419,7 +441,10 @@ if (specialMove.hasOwnProperty(currentEvent)) {
     if (positions[currentPlayer] < 0) positions[currentPlayer] = 0;
   }
   updateBoard();
+  updateTeacherTip();
+  updateTeacherTip();
   currentPlayer = 1 - currentPlayer;
+  updateTeacherTip();
   if (rollBtn) if (rollBtn) rollBtn.disabled = false;
 if (rollBtn2) rollBtn2.disabled = false;
 if (rollBtn2) rollBtn2.disabled = false;
@@ -441,7 +466,10 @@ if (rollBtn2) rollBtn2.disabled = false;
         }
         document.getElementById('action-icon').innerHTML = `${icon} ${msg}`;
         updateBoard();
+  updateTeacherTip();
+  updateTeacherTip();
         currentPlayer = 1 - currentPlayer;
+  updateTeacherTip();
         if (rollBtn) if (rollBtn) rollBtn.disabled = false;
 if (rollBtn2) rollBtn2.disabled = false;
 if (rollBtn2) rollBtn2.disabled = false;
@@ -455,7 +483,10 @@ if (currentEvent === "暫停一次") {
         skipTurn[currentPlayer] = true;
         document.getElementById('action-icon').innerHTML = '⏸️ 暫停一回合！';
         updateBoard();
+  updateTeacherTip();
+  updateTeacherTip();
         currentPlayer = 1 - currentPlayer;
+  updateTeacherTip();
         if (rollBtn) if (rollBtn) rollBtn.disabled = false;
 if (rollBtn2) rollBtn2.disabled = false;
 if (rollBtn2) rollBtn2.disabled = false;
@@ -478,12 +509,17 @@ function judgeAnswer(correct) {
     const prev = parseInt(document.getElementById('question-box').dataset.prev);
     positions[currentPlayer] = isNaN(prev) ? positions[currentPlayer] : prev;
     updateBoard();
+  updateTeacherTip();
+  updateTeacherTip();
   }
   document.getElementById("question-box").style.display = "none";
       currentPlayer = 1 - currentPlayer;
+  updateTeacherTip();
     }
 
     updateBoard();
+  updateTeacherTip();
+  updateTeacherTip();
   function restartGame() {
   positions = [0, 0];
   scores = [0, 0];
@@ -495,6 +531,8 @@ function judgeAnswer(correct) {
   const overlay = document.querySelector('.victory-overlay');
   if (overlay) overlay.remove();
   updateBoard();
+  updateTeacherTip();
+  updateTeacherTip();
   document.getElementById('roll-btn').disabled = false;
   playSound(correct);
 }
