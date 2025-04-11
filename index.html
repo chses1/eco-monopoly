@@ -1,185 +1,499 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>環保小尖兵大富翁</title>
   <style>
     body {
-      font-family: "Noto Sans TC", sans-serif;
-      background: #f0f0f0;
-      margin: 0;
-      padding: 0;
+      font-family: sans-serif;
       text-align: center;
+      background-image: url('https://www.chses.tyc.edu.tw/UpFile/Cairo1680/backgroung.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: #000;
+      font-size: 1.2rem;
+    }
+    .container {
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0 20px;
+      gap: 30px;
+      box-sizing: border-box;
     }
     .board {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
-      max-width: 1200px;
-      margin: 2rem auto;
-      gap: 4px;
+      grid-auto-rows: 120px;
+      grid-gap: 4px;
+      position: relative;
+      width: 1200px;
+      margin: 0 auto;
     }
     .cell {
-      background: white;
-      border: 1px solid #ccc;
       min-height: 100px;
-      padding: 10px;
+      height: auto;
+      border: 1px solid #000;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      font-size: 0.95rem;
-    }
-    .token {
-      width: 28px;
-      height: 28px;
-      margin-top: 4px;
-    }
-    #question-box {
-      margin-top: 1rem;
-    }
-    #question-options {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    #scoreboard {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      margin-top: 1rem;
       font-size: 1.2rem;
+      text-align: center;
+      background-color: #f0f0f0;
+      position: relative;
+      padding: 12px 16px;
+      box-sizing: border-box;
+      word-break: break-word;
     }
-  </style>
+    .cell-text {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      text-align: center;
+      line-height: 1.4;
+      font-size: clamp(0.9rem, 1.1vw, 1.2rem);
+      overflow: visible;
+    }
+    .cell img {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 4px;
+    }
+  .highlight {
+  background-color: #ffeb3b;
+  animation: pulse 0.8s ease-in-out 2;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+.victory-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 1s ease-in-out;
+}
+.victory-banner {
+  background: #fff;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  text-align: center;
+  animation: popIn 0.6s ease;
+}
+.victory-banner h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #d32f2f;
+}
+.victory-banner button {
+  font-size: 1.5rem;
+  padding: 10px 30px;
+  margin-top: 10px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+@keyframes popIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+</style>
 </head>
 <body>
-  <h1>🌱 環保小尖兵大富翁</h1>
-  <div id="scoreboard">
-    <div><img src="player1.png" class="token"> 藍鵲：<span id="score0">0</span> 分</div>
-    <div><img src="player2.png" class="token"> 綠繡眼：<span id="score1">0</span> 分</div>
-  </div>
-  <div class="board" id="board"></div>
-
-  <div id="question-box" style="display: none;">
-    <p id="question"></p>
-    <div id="question-options">
-      <button id="btn-correct">⭕ 答對</button>
-      <button id="btn-wrong">❌ 答錯</button>
+  <h1 style="font-size: 4rem; color: #ffeb3b; text-shadow: 3px 3px 6px #000; font-weight: bold; margin-bottom: 20px;">🌏 環保小尖兵大富翁 🌿</h1>
+  <div class="container">
+    <div style="flex: 0 0 240px; display: flex; flex-direction: column; align-items: flex-start; gap: 20px; font-size: 1.4rem; margin-top: 20px;">
+      <button id="roll-btn" onclick="rollDice()" style="display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 3 / 1; font-size: 2.4rem; padding: 0; border-radius: 20px; background: #ffeb3b; border: 3px solid #333; white-space: nowrap;">🎲 擲骰子</button>
+      <p id="status" style="font-size: 1.6rem; font-weight: bold; min-height: 2.2rem; white-space: nowrap; color: red;"></p>
+      <div id="question-box" style="display:none; max-width: 90vw; padding: 10px; background-color: rgba(255, 255, 255, 0.9); border-radius: 10px; font-size: 1.4rem;">
+        <p id="question"></p>
+        <div class="decision-buttons">
+          <button onclick="judgeAnswer(true)" style="font-size: 1.5rem;">⭕ 答對</button>
+          <button onclick="judgeAnswer(false)" style="font-size: 1.5rem;">❌ 答錯</button>
+        </div>
+      </div>
+      <div id="action-icon" style="font-size: 2rem; color: red; font-weight: bold;"></div>
+    </div>
+    <div class="board" id="board"></div>
+    <div style="flex: 0 0 240px; display: flex; flex-direction: column; align-items: flex-start; gap: 20px; font-size: 1.4rem; margin-top: 20px; background-color: rgba(255,255,255,0.85); padding: 20px; border-radius: 10px;">
+      <div style="font-size: 1.6rem; font-weight: bold; margin-bottom: 10px;">🎯 分數統計</div>
+      <div style="background: #e0f7fa; padding: 10px 20px; border-radius: 8px; width: calc(100% - 10px); text-align: left; box-sizing: border-box;"><img src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player1.png" alt="藍鵲" style="width:32px; vertical-align:middle; margin-right:6px;">藍鵲： <span id="score-blue">0</span> 分</div>
+      <div style="background: #e8eaf6; padding: 10px 20px; border-radius: 8px; width: calc(100% - 10px); text-align: left; box-sizing: border-box;"><img src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player2.png" alt="綠繡眼" style="width:32px; vertical-align:middle; margin-right:6px;">綠繡眼： <span id="score-green">0</span> 分</div>
+      <div style="margin-top: 20px; font-size: 1.2rem; line-height: 1.6;">
+        📜 <strong>遊戲規則：</strong><br>雙方輪流擲骰前進，第一位獲得 3 分的隊伍即獲勝！
+      </div>
     </div>
   </div>
-
-  <audio id="audio-correct" src="correct.mp3" preload="auto"></audio>
-  <audio id="audio-wrong" src="wrong.mp3" preload="auto"></audio>
-
   <script>
-    const questions = [
-      "說出塑膠對海洋生物的傷害",
-      "怎麼保護動物",
-      "怎麼節約用水",
-      "你拿什麼製作環保清潔劑",
-      "說出空氣污染對人體的傷害",
-      "說出一個暖化對地球的傷害",
-      "用過的紙盒還可以做什麼",
-      "洗米水還可以拿來做什麼",
-      "舉出一種減塑的方法",
-      "說出一種低污染的交通工具",
-      "亂砍樹木會發生什麼事",
-      "節電行動：關閉一盞電風扇",
-      "說出一種台灣特有種動物",
-      "台灣減塑有什麼規定",
-      "前進兩步",
-      "回到起點",
-      "前進三步",
-      "後退兩步",
-      "後退兩步",
-      "前進一步",
-      "吹冷氣會造成地球暖化嗎",
-      "你參加過跳蚤市場嗎",
-      "冰山融化會傷害什麼動物",
-      "我們怎麼愛護山林",
-      "走路上學可以減少空汙嗎",
-      "後退一步",
-      "怎麼愛惜食物",
-      "暫停一次",
-      "說出一種瀕臨絕種的動物",
-      "終點"
-    ];
+    const layout = [
+  "起點",
+  "你參加過跳蚤市場嗎說出",
+  "說出一種台灣特有種動物",
+  "亂砍樹木會發生什麼事",
+  "回到起點",
+  "說出一個暖化對地球的傷害", 
+  "說出空氣汙染對人體的傷害",    
+  "你拿什麼製作環保清潔劑",    
+  "前進兩步",
+  "怎麼保護動物",    
+  "說出塑膠對海洋生物的傷害",    
+  "用過的紙盒還可以做什麼",    
+  "前進三步",  
+  "洗米水還可以拿來做什麼",  
+  "舉出一種減塑的方法", 
+  "說出一種低污染的交通工具",
+  "後退兩步",   
+  "節電行動：關閉一盞電風扇",   
+  "吹冷氣會造成地球暖化嗎",   
+   "走路上學可以減少空汙嗎",   
+  "我們怎麼愛護山林",  
+  "台灣減塑有什麼規定",   
+  "後退兩步",
+  "冰山融化會傷害什麼動物",
+  "怎麼愛惜食物",
+  "暫停一次", 
+  "說出一種瀕臨絕種的動物",
+  "節水行動：檢查走廊水龍頭", 
+  "污水處理廠在做什麼",  
+  "我愛地球說三次"
+];
 
-    const board = document.getElementById("board");
-    const questionBox = document.getElementById("question-box");
-    const questionText = document.getElementById("question");
-    const positions = [0, 0];
-    const scores = [0, 0];
+    const specialMove = {
+      "前進兩步": 2,
+      "前進三步": 3,
+      "後退兩步": -2,
+      "回到起點": "start"
+    };
+
+    const boardSize = layout.length;
+    let positions = [0, 0];
+    let scores = [0, 0];
     let currentPlayer = 0;
-
+    let skipTurn = [false, false];
+    const boardEl = document.getElementById('board');
     const playerImages = [
-      'player1.png', // 藍鵲
-      'player2.png'  // 綠繡眼
-    ];
+  'https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player2.png', // 綠繡眼
+  'https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player1.png'  // 藍鵲
+];
 
-    // 初始化格子
-    questions.forEach((q, i) => {
-      const div = document.createElement("div");
-      div.className = "cell";
-      div.id = "cell-" + i;
-      div.textContent = q;
-      board.appendChild(div);
-    });
+    for (let row = 0; row < 5; row++) {
+      for (let col = 0; col < 6; col++) {
+        let index = row * 6 + (row % 2 === 0 ? col : 5 - col);
+        if (index >= layout.length) continue;
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.id = `cell-${index}`;
+        let arrow = '➡️';
+        if (col === 5 && row % 2 === 0 && row < 4) arrow = '⬇️';
+        else if (col === 0 && row % 2 === 1 && row < 4) arrow = '⬇️';
+        else if (row % 2 === 1) arrow = '⬅️';
+        cell.innerHTML = `<div class='cell-text'>${layout[index]}</div><div class='arrow'>${arrow}</div>`;
+        boardEl.appendChild(cell);
+      }
+    }
 
     function updateBoard() {
-      questions.forEach((_, i) => {
-        const cell = document.getElementById("cell-" + i);
-        cell.querySelectorAll("img").forEach(e => e.remove());
-      });
-
-      positions.forEach((pos, idx) => {
-        const img = document.createElement("img");
-        img.src = playerImages[idx];
-        img.className = "token";
-        document.getElementById("cell-" + pos).appendChild(img);
-      });
-
-      document.getElementById("score0").innerText = scores[0];
-      document.getElementById("score1").innerText = scores[1];
-    }
-
-    function playSound(correct) {
-      const correctAudio = document.getElementById("audio-correct");
-      const wrongAudio = document.getElementById("audio-wrong");
-      [correctAudio, wrongAudio].forEach(audio => {
-        audio.pause();
-        audio.currentTime = 0;
-      });
-      const audio = correct ? correctAudio : wrongAudio;
-      if (audio) audio.play();
-    }
-
-    function handleAnswer(correct) {
-      playSound(correct);
-      questionBox.style.display = "none";
-      if (!correct) {
-        positions[currentPlayer] = Math.max(positions[currentPlayer] - 1, 0);
-      }
-      if (positions[currentPlayer] === questions.length - 1) {
-        scores[currentPlayer]++;
-        alert((currentPlayer === 0 ? "藍鵲" : "綠繡眼") + " 得分！");
-
-        if (scores[currentPlayer] === 3) {
-          alert((currentPlayer === 0 ? "藍鵲" : "綠繡眼") + " 獲勝！");
-          scores[0] = 0;
-          scores[1] = 0;
+      layout.forEach((_, i) => {
+        const cell = document.getElementById(`cell-${i}`);
+        if (cell) {
+          const row = Math.floor(i / 6);
+        const col = row % 2 === 0 ? i % 6 : 5 - (i % 6);
+        let arrow = '➡️';
+        if (col === 5 && row % 2 === 0 && row < 4) arrow = '⬇️';
+        else if (col === 0 && row % 2 === 1 && row < 4) arrow = '⬇️';
+        else if (row % 2 === 1) arrow = '⬅️';
+        cell.innerHTML = `<div class='cell-text'>${layout[i]}</div><div class='arrow'>${arrow}</div>`;
+          cell.querySelectorAll('img').forEach(img => img.remove());
         }
-
-        positions[currentPlayer] = 0;
-      } else {
-        currentPlayer = 1 - currentPlayer;
-      }
-      updateBoard();
+      });
+      positions.forEach((pos, idx) => {
+        const target = document.getElementById(`cell-${pos}`);
+        if (target) {
+          let container = target.querySelector('.player-container');
+          if (!container) {
+            container = document.createElement('div');
+            container.className = 'player-container';
+            container.style.display = 'flex';
+            container.style.gap = '4px';
+            container.style.justifyContent = 'center';
+            container.style.alignItems = 'center';
+            target.prepend(container);
+          }
+          const img = document.createElement('img');
+          img.src = playerImages[idx];
+          img.alt = `player${idx + 1}`;
+          if (positions[idx] > 0) {
+  const direction = idx === 0
+    ? (positions[idx] % 12 < 6 ? 'right' : 'left')
+    : (positions[idx] % 12 < 6 ? 'right' : 'left');
+  img.style.transform = direction === 'left' ? 'scaleX(-1)' : 'scaleX(1)';
+}
+          container.appendChild(img);
+        }
+      });
+      document.getElementById('score-green').textContent = scores[0];
+      document.getElementById('score-blue').textContent = scores[1];
     }
 
-    // 初始圖像
+    function rollDice() {
+      const rollBtn = document.getElementById('roll-btn');
+      if (!rollBtn) return;
+      rollBtn.disabled = true;
+      document.getElementById('action-icon').innerHTML = '';
+      
+if (skipTurn[currentPlayer]) {
+  skipTurn[currentPlayer] = false;
+  document.getElementById('action-icon').innerHTML = '⏸️ 暫停一回合！';
+  currentPlayer = 1 - currentPlayer;
+  rollBtn.disabled = false;
+  return;
+currentPlayer = 1 - currentPlayer;
+        rollBtn.disabled = false;
+        return;
+      }
+      const roll = Math.floor(Math.random() * 6) + 1;
+      const status = document.getElementById('status');
+      status.innerHTML = `<img src="${playerImages[currentPlayer]}" style="width: 28px; vertical-align: middle; margin-right: 6px;">${currentPlayer === 0 ? '綠繡眼' : '藍鵲'} 擲出 ${roll} 點`;
+      status.style.color = currentPlayer === 0 ? 'limegreen' : 'deepskyblue';
+      let newPos = positions[currentPlayer] + roll;
+      if (newPos >= boardSize - 1) {
+        const playerName = currentPlayer === 0 ? '綠繡眼' : '藍鵲';
+        
+scores[currentPlayer]++;
+if (scores[currentPlayer] >= 3) {
+  const overlay = document.createElement('div');
+  overlay.className = 'victory-overlay';
+  overlay.innerHTML = `
+    <div class='victory-banner'>
+      <h2>🎉 ${playerName} 獲勝！</h2>
+      <button onclick='restartGame()'>重新開始</button>
+    </div>`;
+  document.body.appendChild(overlay);
+  positions = [0, 0];
+  scores = [0, 0];
+} else {
+  showScorePopup(playerName);
+}
+
+        if (scores[currentPlayer] >= 3) {
+          const overlay = document.createElement('div');
+overlay.className = 'victory-overlay';
+overlay.innerHTML = `
+  <div class='victory-banner'>
+    <h2>🎉 ${currentPlayer === 0 ? '綠繡眼' : '藍鵲'} 獲勝！</h2>
+    <button onclick='restartGame()'>重新開始</button>
+  </div>`;
+document.body.appendChild(overlay);
+          positions = [0, 0];
+          scores = [0, 0];
+        } else {
+          positions[currentPlayer] = 0;
+        }
+        updateBoard();
+        rollBtn.disabled = false;
+        return;
+      }
+      positions[currentPlayer] = newPos;
+      updateBoard();
+      const currentEvent = layout[newPos];
+      const currentCell = document.getElementById(`cell-${newPos}`);
+      if (specialMove.hasOwnProperty(currentEvent) || currentEvent === '暫停一次') {
+        currentCell.classList.add('highlight');
+        playSound();
+        setTimeout(() => currentCell.classList.remove('highlight'), 1200);
+      }
+
+      
+if (specialMove.hasOwnProperty(currentEvent)) {
+  const steps = specialMove[currentEvent];
+  if (steps === "start") {
+    playSound(false);  // 回到起點音效
+    positions[currentPlayer] = 0;
+  } else {
+    if (steps > 0) playSound(true);
+    else playSound(false);
+    positions[currentPlayer] += steps;
+    if (positions[currentPlayer] < 0) positions[currentPlayer] = 0;
+  }
+  updateBoard();
+  currentPlayer = 1 - currentPlayer;
+  rollBtn.disabled = false;
+  return;
+
+        let msg = '', icon = '';
+        if (specialMove[currentEvent] === "start") {
+          msg = '回到起點！'; icon = '🔁';
+          positions[currentPlayer] = 0;
+        } else {
+          const steps = specialMove[currentEvent];
+          if (steps > 0) {
+            msg = `前進 ${steps} 步！`; icon = '➡️';
+          } else {
+            msg = `後退 ${-steps} 步！`; icon = '⬅️';
+          }
+          positions[currentPlayer] += steps;
+          if (positions[currentPlayer] < 0) positions[currentPlayer] = 0;
+        }
+        document.getElementById('action-icon').innerHTML = `${icon} ${msg}`;
+        updateBoard();
+        currentPlayer = 1 - currentPlayer;
+        rollBtn.disabled = false;
+        return;
+      }
+
+      
+if (currentEvent === "暫停一次") {
+  playSound(false);
+
+        skipTurn[currentPlayer] = true;
+        document.getElementById('action-icon').innerHTML = '⏸️ 暫停一回合！';
+        updateBoard();
+        currentPlayer = 1 - currentPlayer;
+        rollBtn.disabled = false;
+        return;
+      }
+
+      document.getElementById('question').textContent = currentEvent;
+      document.getElementById('question-box').style.display = 'block';
+      document.getElementById('question-box').dataset.prev = newPos - roll;
+    }
+
+    
+function judgeAnswer(correct) {
+  playSound(correct);
+  document.getElementById("roll-btn").disabled = false;
+  if (!correct) {
+    const prev = parseInt(document.getElementById('question-box').dataset.prev);
+    positions[currentPlayer] = isNaN(prev) ? positions[currentPlayer] : prev;
     updateBoard();
-  </script>
+  }
+  document.getElementById("question-box").style.display = "none";
+      currentPlayer = 1 - currentPlayer;
+    }
+
+    updateBoard();
+  function restartGame() {
+  positions = [0, 0];
+  scores = [0, 0];
+  skipTurn = [false, false];
+  currentPlayer = 0;
+  document.getElementById('status').textContent = '';
+  document.getElementById('action-icon').textContent = '';
+  document.getElementById('question-box').style.display = 'none';
+  const overlay = document.querySelector('.victory-overlay');
+  if (overlay) overlay.remove();
+  updateBoard();
+  document.getElementById('roll-btn').disabled = false;
+  playSound(correct);
+}
+</script>
+
+<script>
+  
+function playSound(correct) {
+  const correctAudio = document.getElementById("audio-correct");
+  const wrongAudio = document.getElementById("audio-wrong");
+  [correctAudio, wrongAudio].forEach(audio => {
+    audio.pause();
+    audio.currentTime = 0;
+  });
+  (correct ? correctAudio : wrongAudio).play();
+}
+</script>
+
+<audio id="audio-correct" src="correct.mp3" preload="auto"></audio>
+<audio id="audio-wrong" src="wrong.mp3" preload="auto"></audio>
+<script>
+function playSound(correct) {
+  const correctAudio = document.getElementById("audio-correct");
+  const wrongAudio = document.getElementById("audio-wrong");
+  [correctAudio, wrongAudio].forEach(audio => {
+    audio.pause();
+    audio.currentTime = 0;
+  });
+  (correct ? correctAudio : wrongAudio).play();
+}
+</script>
+
+<!-- 得分動畫區 -->
+<div id="score-popup" class="popup" style="display: none;">
+  <div class="popup-content" id="score-message">🏁 獲得 1 分，5 秒後繼續遊戲</div>
+</div>
+<style>
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.popup-content {
+  background: white;
+  padding: 2rem 3rem;
+  font-size: 2rem;
+  border-radius: 16px;
+  animation: popIn 0.5s ease;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+</style>
+
+<script>
+function showScorePopup(playerName) {
+  const popup = document.getElementById("score-popup");
+  const message = document.getElementById("score-message");
+  message.innerText = `🏁 ${playerName} 獲得 1 分，5 秒後繼續遊戲`;
+  popup.style.display = "flex";
+  setTimeout(() => {
+    popup.style.display = "none";
+  }, 5000);
+}
+function showVictory(playerName) {
+  const popup = document.getElementById("score-popup");
+  const message = document.getElementById("score-message");
+  message.innerText = `🏆 ${playerName} 獲勝啦！`;
+  popup.style.display = "flex";
+}
+</script>
 </body>
+
+
 </html>
