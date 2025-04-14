@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-
 <html lang="zh-Hant">
 <head>
-<meta charset="utf-8"/>
-<title>環保小尖兵大富翁</title>
-<style>
+  <meta charset="utf-8"/>
+  <title>環保小尖兵大富翁</title>
+  <style>
     body {
       font-family: sans-serif;
       text-align: center;
@@ -74,246 +73,247 @@
       height: 48px;
       margin-bottom: 4px;
     }
-  .highlight {
-  background-color: #ffeb3b;
-  animation: pulse 0.8s ease-in-out 2;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.08); }
-  100% { transform: scale(1); }
-}
-.victory-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  animation: fadeIn 1s ease-in-out;
-}
-.victory-banner {
-  background: #fff;
-  padding: 40px;
-  border-radius: 20px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
-  text-align: center;
-  animation: popIn 0.6s ease;
-}
-.victory-banner h2 {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-  color: #d32f2f;
-}
-.victory-banner button {
-  font-size: 1.5rem;
-  padding: 10px 30px;
-  margin-top: 10px;
-  background: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-}
-@keyframes popIn {
-  0% { transform: scale(0.5); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes shakeDice {
-  0% { transform: rotate(0deg); }
-  25% { transform: rotate(20deg); }
-  50% { transform: rotate(-20deg); }
-  75% { transform: rotate(10deg); }
-  100% { transform: rotate(0deg); }
-}
-.dice-shake {
-  color: #d32f2f;
-  font-weight: bold;
-  display: inline-block;
-  animation: shakeDice 0.5s ease-in-out;
-}
-
-@keyframes floatUp {
-  0% { transform: translateY(0); opacity: 1; }
-  100% { transform: translateY(-50px); opacity: 0; }
-}
-#score-float {
-  position: fixed;
-  top: 40%;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 4rem;
-  color: #ff4081;
-  font-weight: bold;
-  animation: floatUp 1s ease-out forwards;
-  pointer-events: none;
-  z-index: 9999;
-}
-@keyframes popTrophy {
-  0% { transform: scale(0); opacity: 0; }
-  50% { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(1); }
-}
-#win-screen {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9998;
-}
-#win-screen .trophy {
-  font-size: 6rem;
-  animation: popTrophy 1s ease;
-  color: gold;
-  text-align: center;
-}
-</style>
+    .highlight {
+      background-color: #ffeb3b;
+      animation: pulse 0.8s ease-in-out 2;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+    .victory-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeIn 1s ease-in-out;
+    }
+    .victory-banner {
+      background: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      text-align: center;
+      animation: popIn 0.6s ease;
+    }
+    .victory-banner h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #d32f2f;
+    }
+    .victory-banner button {
+      font-size: 1.5rem;
+      padding: 10px 30px;
+      margin-top: 10px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes shakeDice {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(20deg); }
+      50% { transform: rotate(-20deg); }
+      75% { transform: rotate(10deg); }
+      100% { transform: rotate(0deg); }
+    }
+    .dice-shake {
+      color: #d32f2f;
+      font-weight: bold;
+      display: inline-block;
+      animation: shakeDice 0.5s ease-in-out;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-50px); opacity: 0; }
+    }
+    #score-float {
+      position: fixed;
+      top: 40%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 4rem;
+      color: #ff4081;
+      font-weight: bold;
+      animation: floatUp 1s ease-out forwards;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    @keyframes popTrophy {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    #win-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9998;
+    }
+    #win-screen .trophy {
+      font-size: 6rem;
+      animation: popTrophy 1s ease;
+      color: gold;
+      text-align: center;
+    }
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .popup-content {
+      background: white;
+      padding: 2rem 3rem;
+      font-size: 2rem;
+      border-radius: 16px;
+      animation: popIn 0.5s ease;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+  </style>
 </head>
 <body>
-<h1 style="font-size: 4rem; color: #ffeb3b; text-shadow: 3px 3px 6px #000; font-weight: bold; margin-bottom: 20px;">🌏 環保小尖兵大富翁 🌿</h1>
-<div class="container">
-<div style="flex: 0 0 400px; display: flex; flex-direction: column; align-items: center; gap: 20px; font-size: 2rem; margin-top: 20px; background-color: rgba(255,255,255,0.85); padding: 20px; border-radius: 10px;">
-<div id="teacher-tip" style="font-size: 2.4rem; font-weight: bold; color: darkorange; text-align: center;">👉 現在輪到藍鵲擲骰子</div>
-<button id="roll-btn" onclick="rollDice()" style="display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 3 / 1; font-size: 2.4rem; padding: 0; border-radius: 20px; background: #ffeb3b; border: 3px solid #333; white-space: nowrap;">🎲 擲骰子</button><div id="dice-animation" style="font-size: 5rem; text-align: center; height: 80px; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #d32f2f;">🎲 1</div>
-<p id="status" style="font-size: 2.4rem; font-weight: bold; min-height: 2.2rem; white-space: nowrap; color: red;"></p>
-<div id="question-box" style="display:none; max-width: 90vw; padding: 10px; background-color: rgba(255, 255, 255, 0.9); border-radius: 10px; font-size: 1.4rem;">
-<p id="question"></p>
-<div class="decision-buttons">
-<button onclick="judgeAnswer(true)" style="font-size: 1.5rem;">⭕ 答對</button>
-<button onclick="judgeAnswer(false)" style="font-size: 1.5rem;">❌ 答錯</button>
-</div>
-</div>
-<div id="action-icon" style="font-size: 2rem; color: red; font-weight: bold;"></div>
-</div>
-<div class="board" id="board"></div>
-<div style="flex: 0 0 400px; display: flex; flex-direction: column; align-items: center; gap: 20px; font-size: 2rem; margin-top: 20px; background-color: rgba(255,255,255,0.85); padding: 20px; border-radius: 10px;">
-<div style="font-size: 2.4rem; font-weight: bold; margin-bottom: 10px;">🎯 分數統計</div>
-<div style="background: #e0f7fa; padding: 10px 20px; border-radius: 8px; width: calc(100% - 10px); text-align: left; box-sizing: border-box;"><img alt="藍鵲" src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player1.png" style="width:48px; vertical-align:middle; margin-right:6px;"/>藍鵲： <span id="score-blue">0</span> 分</div>
-<div style="background: #e8eaf6; padding: 10px 20px; border-radius: 8px; width: calc(100% - 10px); text-align: left; box-sizing: border-box;"><img alt="綠繡眼" src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player2.png" style="width:48px; vertical-align:middle; margin-right:6px;"/>綠繡眼： <span id="score-green">0</span> 分</div>
-<div style="margin-top: 20px; font-size: 1.2rem; line-height: 1.6;">
+  <h1 style="font-size: 4rem; color: #ffeb3b; text-shadow: 3px 3px 6px #000; font-weight: bold; margin-bottom: 20px;">🌏 環保小尖兵大富翁 🌿</h1>
+  <!-- 模式切換開關 -->
+  <div id="mode-switch" style="margin-bottom:20px; font-size:1.8rem;">
+    <label>
+      <input type="checkbox" id="toggle-mode"> 切換到手動模式
+    </label>
+  </div>
+  <div class="container">
+    <div style="flex: 0 0 400px; display: flex; flex-direction: column; align-items: center; gap: 20px; font-size: 2rem; margin-top: 20px; background-color: rgba(255,255,255,0.85); padding: 20px; border-radius: 10px;">
+      <div id="teacher-tip" style="font-size: 2.4rem; font-weight: bold; color: darkorange; text-align: center;">👉 輪到 <img src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player1.png" style="width: 48px; vertical-align: middle; margin-right: 6px;"><span style="color: deepskyblue; font-weight: bold;">藍鵲</span> 擲骰子</div>
+      <button id="roll-btn" onclick="rollDice()" style="display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 3/1; font-size: 2.4rem; padding: 0; border-radius: 20px; background: #ffeb3b; border: 3px solid #333; white-space: nowrap;">🎲 擲骰子</button>
+      <div id="dice-animation" style="font-size: 5rem; text-align: center; height: 80px; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #d32f2f;">🎲 1</div>
+      <p id="status" style="font-size: 2.4rem; font-weight: bold; min-height: 2.2rem; white-space: nowrap; color: red;"></p>
+      <div id="question-box" style="display:none; max-width: 90vw; padding: 10px; background-color: rgba(255,255,255,0.9); border-radius: 10px; font-size: 1.4rem;">
+        <p id="question"></p>
+        <div class="decision-buttons">
+          <button onclick="judgeAnswer(true)" style="font-size: 1.5rem;">⭕ 答對</button>
+          <button onclick="judgeAnswer(false)" style="font-size: 1.5rem;">❌ 答錯</button>
+        </div>
+      </div>
+      <div id="action-icon" style="font-size: 2rem; color: red; font-weight: bold;"></div>
+    </div>
+    <div class="board" id="board"></div>
+    <div style="flex: 0 0 400px; display: flex; flex-direction: column; align-items: center; gap: 20px; font-size: 2rem; margin-top: 20px; background-color: rgba(255,255,255,0.85); padding: 20px; border-radius: 10px;">
+      <div style="font-size: 2.4rem; font-weight: bold; margin-bottom: 10px;">🎯 分數統計</div>
+      <div style="background: #e0f7fa; padding: 10px 20px; border-radius: 8px; width: calc(100% - 10px); text-align: left; box-sizing: border-box;">
+        <img alt="藍鵲" src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player1.png" style="width:48px; vertical-align: middle; margin-right: 6px;"/>藍鵲： <span id="score-blue">0</span> 分
+      </div>
+      <div style="background: #e8eaf6; padding: 10px 20px; border-radius: 8px; width: calc(100% - 10px); text-align: left; box-sizing: border-box;">
+        <img alt="綠繡眼" src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player2.png" style="width:48px; vertical-align: middle; margin-right: 6px;"/>綠繡眼： <span id="score-green">0</span> 分
+      </div>
+      <div style="margin-top: 20px; font-size: 1.2rem; line-height: 1.6;">
         📜 <strong>遊戲規則：</strong><br/>雙方輪流擲骰前進，第一位獲得 3 分的隊伍即獲勝！
       </div>
-<button id="roll-btn-duplicate" onclick="rollDice()" style="display: block; width: 100%; margin-top: 12px; padding: 10px; font-size: 1.8rem; border-radius: 12px; background: #ffeb3b; border: 3px solid #333; box-sizing: border-box;">🎲 擲骰子</button><div id="dice-animation-2" style="font-size: 5rem; text-align: center; height: 80px; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #d32f2f;">🎲 1</div></div>
-</div>
-<script>
-
-function moveSteps(steps) {
-  if (steps <= 0) {
-    currentPlayer = 1 - currentPlayer;
-    updateTeacherTip();
-    document.getElementById("roll-btn").disabled = false;
-    document.getElementById("roll-btn-duplicate").disabled = false;
-    return;
-  }
-
-  positions[currentPlayer]++;
-  if (positions[currentPlayer] >= boardSize) positions[currentPlayer] = boardSize - 1;
-  updateBoard();
-  updateTeacherTip();
-
-  const currentEvent = layout[positions[currentPlayer]];
-  const currentCell = document.getElementById(`cell-${positions[currentPlayer]}`);
-  if (specialMove.hasOwnProperty(currentEvent)) {
-    const stepsMove = specialMove[currentEvent];
-    if (stepsMove === "start") {
-      positions[currentPlayer] = 0;
-    } else {
-      positions[currentPlayer] += stepsMove;
-      if (positions[currentPlayer] < 0) positions[currentPlayer] = 0;
-    }
-    updateBoard();
-    updateTeacherTip();
-  } else if (currentEvent === "暫停一次") {
-    skipTurn[currentPlayer] = true;
-    document.getElementById('action-icon').innerHTML = '⏸️ 暫停一回合！';
-  }
-
-  setTimeout(() => moveSteps(steps - 1), 600);
-}
-
-
-function updateTeacherTip() {
-  const tipEl = document.getElementById('teacher-tip');
-  const icon = currentPlayer === 0 
-    ? '<img src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player2.png" style="width: 48px; vertical-align: middle; margin-right: 6px;">'
-    : '<img src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player1.png" style="width: 48px; vertical-align: middle; margin-right: 6px;">';
-  const name = currentPlayer === 0 
-    ? '<span style="color: limegreen; font-weight: bold;">綠繡眼</span>'
-    : '<span style="color: deepskyblue; font-weight: bold;">藍鵲</span>';
-  tipEl.innerHTML = `👉 輪到 ${icon}${name} 擲骰子`;
-
-  const tipText = currentPlayer === 0 ? '👉 現在輪到綠繡眼擲骰子' : '👉 現在輪到藍鵲擲骰子';
-  
-}
-
+      <button id="roll-btn-duplicate" onclick="rollDice()" style="display: block; width: 100%; margin-top: 12px; padding: 10px; font-size: 1.8rem; border-radius: 12px; background: #ffeb3b; border: 3px solid #333; box-sizing: border-box;">🎲 擲骰子</button>
+      <div id="dice-animation-2" style="font-size: 5rem; text-align: center; height: 80px; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #d32f2f;">🎲 1</div>
+    </div>
+  </div>
+  <audio id="audio-correct" preload="auto" src="correct.mp3"></audio>
+  <audio id="audio-wrong" preload="auto" src="wrong.mp3"></audio>
+  <!-- 得分動畫區 -->
+  <div class="popup" id="score-popup" style="display: none;">
+    <div class="popup-content" id="score-message">🏁 獲得 1 分，5 秒後繼續遊戲</div>
+  </div>
+  <div id="score-float" style="display:none;">+1 分！</div>
+  <div id="win-screen" style="display:none;">
+    <div style="text-align: center;">
+      <div class="trophy" style="font-size: 6rem; margin-bottom: 1rem;">🏆</div>
+      <div style="font-size: 2.5rem; color: white;">過關成功！</div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    // 遊戲規則與變數宣告
     const layout = [
-  "起點",
-  "你參加過跳蚤市場嗎說出",
-  "說出一種台灣特有種動物",
-  "亂砍樹木會發生什麼事",
-  "回到起點",
-  "說出一個暖化對地球的傷害", 
-  "說出空氣汙染對人體的傷害",    
-  "你拿什麼製作環保清潔劑",    
-  "前進兩步",
-  "怎麼保護動物",    
-  "說出塑膠對海洋生物的傷害",    
-  "用過的紙盒還可以做什麼",    
-  "前進三步",  
-  "洗米水還可以拿來做什麼",  
-  "舉出一種減塑的方法", 
-  "說出一種低污染的交通工具",
-  "後退兩步",   
-  "節電行動：關閉一盞電風扇",   
-  "吹冷氣會造成地球暖化嗎",   
-   "走路上學可以減少空汙嗎",   
-  "我們怎麼愛護山林",  
-  "台灣減塑有什麼規定",   
-  "後退兩步",
-  "冰山融化會傷害什麼動物",
-  "怎麼愛惜食物",
-  "暫停一次", 
-  "說出一種瀕臨絕種的動物",
-  "節水行動：檢查走廊水龍頭", 
-  "污水處理廠在做什麼",  
-  "我愛地球說三次"
-];
-
+      "起點",
+      "你參加過跳蚤市場嗎",
+      "說出一種台灣特有種動物",
+      "亂砍樹木會發生什麼事",
+      "回到起點",
+      "說出一個暖化對地球的傷害", 
+      "說出空氣汙染對人體的傷害",    
+      "你拿什麼製作環保清潔劑",    
+      "前進兩步",
+      "怎麼保護動物",    
+      "說出塑膠對海洋生物的傷害",    
+      "用過的紙盒還可以做什麼",    
+      "前進三步",  
+      "洗米水還可以拿來做什麼",  
+      "舉出一種減塑的方法", 
+      "說出一種低污染的交通工具",
+      "後退兩步",   
+      "節電行動：關閉一盞電風扇",   
+      "吹冷氣會造成地球暖化嗎",   
+      "走路上學可以減少空汙嗎",   
+      "我們怎麼愛護山林",  
+      "台灣減塑有什麼規定",   
+      "後退兩步",
+      "冰山融化會傷害什麼動物",
+      "怎麼愛惜食物",
+      "說出一種瀕臨絕種的動物",
+      "節水行動：檢查走廊水龍頭", 
+      "污水處理廠在做什麼",  
+      "我愛地球說三次",
+      "終點"
+    ];
     const specialMove = {
       "前進兩步": 2,
       "前進三步": 3,
       "後退兩步": -2,
       "回到起點": "start"
     };
-
     const boardSize = layout.length;
     let positions = [0, 0];
     let scores = [0, 0];
     let currentPlayer = 0;
     let skipTurn = [false, false];
+
+    // 模式相關全域變數（預設為自動模式）
+    let isManualMode = false;
+    let manualMoveInProgress = false;
+    let manualOldPos = 0;
+    let manualDiceRoll = 0; // 用來記錄手動模式下擲出的骰子點數
+
     const boardEl = document.getElementById('board');
     const playerImages = [
-  'https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player2.png', // 綠繡眼
-  'https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player1.png'  // 藍鵲
-];
+      'https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player2.png', // 綠繡眼
+      'https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player1.png'  // 藍鵲
+    ];
 
+    // 建立棋盤
     for (let row = 0; row < 5; row++) {
       for (let col = 0; col < 6; col++) {
         let index = row * 6 + (row % 2 === 0 ? col : 5 - col);
-        if (index >= layout.length) continue;
+        if (index >= boardSize) continue;
         const cell = document.createElement('div');
         cell.className = 'cell';
         cell.id = `cell-${index}`;
@@ -326,17 +326,53 @@ function updateTeacherTip() {
       }
     }
 
+    // 為每個格子新增點擊事件（僅在手動模式且尚未移動中時觸發）
+    document.querySelectorAll('.cell').forEach(cell => {
+      cell.addEventListener('click', function() {
+        if (!isManualMode || manualMoveInProgress) return;
+        let parts = this.id.split("-");
+        if (parts.length < 2) return;
+        let targetIndex = parseInt(parts[1]);
+        if (isNaN(targetIndex)) return;
+        // 保存原本位置以供答錯時還原
+        manualOldPos = positions[currentPlayer];
+        document.getElementById('question-box').dataset.prev = manualOldPos;
+        manualMoveInProgress = true;
+        positions[currentPlayer] = targetIndex;
+        updateBoard();
+        document.getElementById('question').textContent = layout[targetIndex];
+        document.getElementById('question-box').style.display = 'block';
+      });
+    });
+
+    // 更新教師提示（顯示當前玩家，若手動模式附加提示）
+    function updateTeacherTip() {
+      const tipEl = document.getElementById('teacher-tip');
+      const icon = currentPlayer === 0
+        ? '<img src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player2.png" style="width:48px; vertical-align:middle; margin-right:6px;">'
+        : '<img src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player1.png" style="width:48px; vertical-align:middle; margin-right:6px;">';
+      const name = currentPlayer === 0
+        ? '<span style="color: limegreen; font-weight: bold;">綠繡眼</span>'
+        : '<span style="color: deepskyblue; font-weight: bold;">藍鵲</span>';
+      let tipMsg = `👉 輪到 ${icon}${name} 擲骰子`;
+      if (isManualMode) {
+        tipMsg += " 【手動模式：請點選棋盤移動】";
+      }
+      tipEl.innerHTML = tipMsg;
+    }
+
+    // 更新棋盤畫面（重繪棋盤及玩家圖示）
     function updateBoard() {
       layout.forEach((_, i) => {
         const cell = document.getElementById(`cell-${i}`);
         if (cell) {
           const row = Math.floor(i / 6);
-        const col = row % 2 === 0 ? i % 6 : 5 - (i % 6);
-        let arrow = '➡️';
-        if (col === 5 && row % 2 === 0 && row < 4) arrow = '⬇️';
-        else if (col === 0 && row % 2 === 1 && row < 4) arrow = '⬇️';
-        else if (row % 2 === 1) arrow = '⬅️';
-        cell.innerHTML = `<div class='cell-text'>${layout[i]}</div><div class='arrow'>${arrow}</div>`;
+          const col = row % 2 === 0 ? i % 6 : 5 - (i % 6);
+          let arrow = '➡️';
+          if (col === 5 && row % 2 === 0 && row < 4) arrow = '⬇️';
+          else if (col === 0 && row % 2 === 1 && row < 4) arrow = '⬇️';
+          else if (row % 2 === 1) arrow = '⬅️';
+          cell.innerHTML = `<div class='cell-text'>${layout[i]}</div><div class='arrow'>${arrow}</div>`;
           cell.querySelectorAll('img').forEach(img => img.remove());
         }
       });
@@ -356,12 +392,10 @@ function updateTeacherTip() {
           const img = document.createElement('img');
           img.src = playerImages[idx];
           img.alt = `player${idx + 1}`;
-          if (positions[idx] > 0) {
-  const direction = idx === 0
-    ? (positions[idx] % 12 < 6 ? 'right' : 'left')
-    : (positions[idx] % 12 < 6 ? 'right' : 'left');
-  img.style.transform = direction === 'left' ? 'scaleX(-1)' : 'scaleX(1)';
-}
+          if (pos > 0) {
+            const direction = pos % 12 < 6 ? 'right' : 'left';
+            img.style.transform = direction === 'left' ? 'scaleX(-1)' : 'scaleX(1)';
+          }
           container.appendChild(img);
         }
       });
@@ -369,99 +403,96 @@ function updateTeacherTip() {
       document.getElementById('score-blue').textContent = scores[1];
     }
 
+    // 擲骰子函數：自動模式下依骰子點數移動；手動模式下僅顯示點數且鎖定骰子按鈕
     function rollDice() {
       const rollBtn = document.getElementById("roll-btn");
-const rollBtn2 = document.getElementById("roll-btn-duplicate");
+      const rollBtn2 = document.getElementById("roll-btn-duplicate");
       if (!rollBtn) return;
-      if (rollBtn) if (rollBtn) rollBtn.disabled = true;
-if (rollBtn2) rollBtn2.disabled = true;
-if (rollBtn2) rollBtn2.disabled = true;
+      rollBtn.disabled = true;
+      rollBtn2.disabled = true;
       document.getElementById('action-icon').innerHTML = '';
-      
-if (skipTurn[currentPlayer]) {
-  skipTurn[currentPlayer] = false;
-  document.getElementById('action-icon').innerHTML = '⏸️ 暫停一回合！';
-  currentPlayer = 1 - currentPlayer;
-  updateTeacherTip();
-  if (rollBtn) if (rollBtn) rollBtn.disabled = false;
-if (rollBtn2) rollBtn2.disabled = false;
-if (rollBtn2) rollBtn2.disabled = false;
-  return;
-currentPlayer = 1 - currentPlayer;
-  updateTeacherTip();
-        if (rollBtn) if (rollBtn) rollBtn.disabled = false;
-if (rollBtn2) rollBtn2.disabled = false;
-if (rollBtn2) rollBtn2.disabled = false;
+
+      if (skipTurn[currentPlayer]) {
+        skipTurn[currentPlayer] = false;
+        document.getElementById('action-icon').innerHTML = '⏸️ 暫停一回合！';
+        currentPlayer = 1 - currentPlayer;
+        updateTeacherTip();
+        rollBtn.disabled = false;
+        rollBtn2.disabled = false;
         return;
       }
+
       const roll = Math.floor(Math.random() * 6) + 1;
       const diceContainer = document.getElementById("dice-animation");
-const diceContainer2 = document.getElementById("dice-animation-2");
+      const diceContainer2 = document.getElementById("dice-animation-2");
       diceContainer.innerHTML = `<span class="dice-shake">🎲 ${roll}</span>`;
-if (diceContainer2) diceContainer2.innerHTML = `<span class="dice-shake">🎲 ${roll}</span>`;
+      diceContainer2.innerHTML = `<span class="dice-shake">🎲 ${roll}</span>`;
       setTimeout(() => {
         diceContainer.innerHTML = `🎲 ${roll}`;
-if (diceContainer2) diceContainer2.innerHTML = `🎲 ${roll}`;
+        diceContainer2.innerHTML = `🎲 ${roll}`;
       }, 500);
       const status = document.getElementById('status');
-      status.innerHTML = `<img src="${playerImages[currentPlayer]}" style="width: 48px; vertical-align: middle; margin-right: 6px;">${currentPlayer === 0 ? '綠繡眼' : '藍鵲'} 擲出 ${roll} 點`;
+      status.innerHTML = `<img src="${playerImages[currentPlayer]}" style="width:48px; vertical-align:middle; margin-right:6px;">${currentPlayer === 0 ? '綠繡眼' : '藍鵲'} 擲出 ${roll} 點`;
       status.style.color = currentPlayer === 0 ? 'limegreen' : 'deepskyblue';
+      
+      if (isManualMode) {
+        // 手動模式下，保留骰子點數但持續鎖定骰子按鈕，等待玩家點選棋盤並答題
+        manualDiceRoll = roll;
+        return;
+      }
+      
+      // 自動模式：依骰子點數自動移動
       let newPos = positions[currentPlayer] + roll;
       if (newPos >= boardSize - 1) {
         const playerName = currentPlayer === 0 ? '綠繡眼' : '藍鵲';
-        
-scores[currentPlayer]++;
-if (scores[currentPlayer] >= 3) {
-  const overlay = document.createElement('div');
-  overlay.className = 'victory-overlay';
-  overlay.innerHTML = `
-    <div class='victory-banner'>
-      <h2>🎉 ${playerName} 獲勝！</h2>
-      <button onclick='restartGame()'>重新開始</button>
-    </div>`;
-  document.body.appendChild(overlay);
-  showWinScreen();
-  positions = [0, 0];
-  scores = [0, 0];
-  updateBoard();
-  updateTeacherTip();
-  return;
-} else {
-  showScorePopup(playerName);
-  showScoreAnimation();
-  const remainingSteps = newPos - (boardSize - 1);
-  positions[currentPlayer] = 0;
-  updateBoard();
-  setTimeout(() => moveSteps(remainingSteps), 800);
-}
-
+        scores[currentPlayer]++;
         if (scores[currentPlayer] >= 3) {
           const overlay = document.createElement('div');
-overlay.className = 'victory-overlay';
-overlay.innerHTML = `
-  <div class='victory-banner'>
-    <h2>🎉 ${currentPlayer === 0 ? '綠繡眼' : '藍鵲'} 獲勝！</h2>
-    <button onclick='restartGame()'>重新開始</button>
-  </div>`;
-document.body.appendChild(overlay);
-  showWinScreen();
+          overlay.className = 'victory-overlay';
+          overlay.innerHTML = `
+            <div class='victory-banner'>
+              <h2>🎉 ${playerName} 獲勝！</h2>
+              <button onclick='restartGame()'>重新開始</button>
+            </div>`;
+          document.body.appendChild(overlay);
+          showWinScreen();
+          positions = [0, 0];
+          scores = [0, 0];
+          updateBoard();
+          updateTeacherTip();
+          return;
+        } else {
+          showScorePopup(playerName);
+          showScoreAnimation();
+          const remainingSteps = newPos - (boardSize - 1);
+          positions[currentPlayer] = 0;
+          updateBoard();
+          setTimeout(() => moveSteps(remainingSteps), 800);
+        }
+        if (scores[currentPlayer] >= 3) {
+          const overlay = document.createElement('div');
+          overlay.className = 'victory-overlay';
+          overlay.innerHTML = `
+            <div class='victory-banner'>
+              <h2>🎉 ${currentPlayer === 0 ? '綠繡眼' : '藍鵲'} 獲勝！</h2>
+              <button onclick='restartGame()'>重新開始</button>
+            </div>`;
+          document.body.appendChild(overlay);
+          showWinScreen();
           positions = [0, 0];
           scores = [0, 0];
         } else {
           positions[currentPlayer] = 0;
         }
         updateBoard();
-  updateTeacherTip();
-  updateTeacherTip();
-        if (rollBtn) if (rollBtn) rollBtn.disabled = false;
-if (rollBtn2) rollBtn2.disabled = false;
-if (rollBtn2) rollBtn2.disabled = false;
+        updateTeacherTip();
+        rollBtn.disabled = false;
+        rollBtn2.disabled = false;
         return;
       }
       positions[currentPlayer] = newPos;
       updateBoard();
-  updateTeacherTip();
-  updateTeacherTip();
+      updateTeacherTip();
       const currentEvent = layout[newPos];
       const currentCell = document.getElementById(`cell-${newPos}`);
       if (specialMove.hasOwnProperty(currentEvent) || currentEvent === '暫停一次') {
@@ -469,223 +500,204 @@ if (rollBtn2) rollBtn2.disabled = false;
         playSound();
         setTimeout(() => currentCell.classList.remove('highlight'), 1200);
       }
-
-      
-if (specialMove.hasOwnProperty(currentEvent)) {
-  const steps = specialMove[currentEvent];
-  if (steps === "start") {
-    playSound(false);  // 回到起點音效
-    positions[currentPlayer] = 0;
-  } else {
-    if (steps > 0) playSound(true);
-    else playSound(false);
-    positions[currentPlayer] += steps;
-    if (positions[currentPlayer] < 0) positions[currentPlayer] = 0;
-  }
-  updateBoard();
-  updateTeacherTip();
-  updateTeacherTip();
-  currentPlayer = 1 - currentPlayer;
-  updateTeacherTip();
-  if (rollBtn) if (rollBtn) rollBtn.disabled = false;
-if (rollBtn2) rollBtn2.disabled = false;
-if (rollBtn2) rollBtn2.disabled = false;
-  return;
-
-        let msg = '', icon = '';
-        if (specialMove[currentEvent] === "start") {
-          msg = '回到起點！'; icon = '🔁';
+      if (specialMove.hasOwnProperty(currentEvent)) {
+        const steps = specialMove[currentEvent];
+        if (steps === "start") {
+          playSound(false);
           positions[currentPlayer] = 0;
         } else {
-          const steps = specialMove[currentEvent];
-          if (steps > 0) {
-            msg = `前進 ${steps} 步！`; icon = '➡️';
-          } else {
-            msg = `後退 ${-steps} 步！`; icon = '⬅️';
-          }
+          if (steps > 0) playSound(true);
+          else playSound(false);
           positions[currentPlayer] += steps;
           if (positions[currentPlayer] < 0) positions[currentPlayer] = 0;
         }
-        document.getElementById('action-icon').innerHTML = `${icon} ${msg}`;
         updateBoard();
-  updateTeacherTip();
-  updateTeacherTip();
+        updateTeacherTip();
         currentPlayer = 1 - currentPlayer;
-  updateTeacherTip();
-        if (rollBtn) if (rollBtn) rollBtn.disabled = false;
-if (rollBtn2) rollBtn2.disabled = false;
-if (rollBtn2) rollBtn2.disabled = false;
+        updateTeacherTip();
+        rollBtn.disabled = false;
+        rollBtn2.disabled = false;
         return;
       }
-
-      
-if (currentEvent === "暫停一次") {
-  playSound(false);
-
+      if (currentEvent === "暫停一次") {
+        playSound(false);
         skipTurn[currentPlayer] = true;
         document.getElementById('action-icon').innerHTML = '⏸️ 暫停一回合！';
         updateBoard();
-  updateTeacherTip();
-  updateTeacherTip();
+        updateTeacherTip();
         currentPlayer = 1 - currentPlayer;
-  updateTeacherTip();
-        if (rollBtn) if (rollBtn) rollBtn.disabled = false;
-if (rollBtn2) rollBtn2.disabled = false;
-if (rollBtn2) rollBtn2.disabled = false;
+        updateTeacherTip();
+        rollBtn.disabled = false;
+        rollBtn2.disabled = false;
         return;
       }
-
+      // 一般情況：出現問題讓玩家回答
       document.getElementById('question').textContent = currentEvent;
       document.getElementById('question-box').style.display = 'block';
       document.getElementById('question-box').dataset.prev = newPos - roll;
     }
 
-    
-function judgeAnswer(correct) {
-  playSound(correct);
-  const rollBtn = document.getElementById("roll-btn");
-  const rollBtn2 = document.getElementById("roll-btn-duplicate");
-  if (rollBtn) rollBtn.disabled = false;
-  if (rollBtn2) rollBtn2.disabled = false;
-  if (!correct) {
-    const prev = parseInt(document.getElementById('question-box').dataset.prev);
-    positions[currentPlayer] = isNaN(prev) ? positions[currentPlayer] : prev;
-    updateBoard();
-  updateTeacherTip();
-  updateTeacherTip();
-  }
-  document.getElementById("question-box").style.display = "none";
-      currentPlayer = 1 - currentPlayer;
-  updateTeacherTip();
+    // moveSteps() 用於自動模式的補位動作
+    function moveSteps(steps) {
+      if (steps <= 0) {
+        currentPlayer = 1 - currentPlayer;
+        updateTeacherTip();
+        document.getElementById("roll-btn").disabled = false;
+        document.getElementById("roll-btn-duplicate").disabled = false;
+        return;
+      }
+      positions[currentPlayer]++;
+      if (positions[currentPlayer] >= boardSize) positions[currentPlayer] = boardSize - 1;
+      updateBoard();
+      updateTeacherTip();
+      const currentEvent = layout[positions[currentPlayer]];
+      const currentCell = document.getElementById(`cell-${positions[currentPlayer]}`);
+      if (specialMove.hasOwnProperty(currentEvent)) {
+        const stepsMove = specialMove[currentEvent];
+        if (stepsMove === "start") {
+          positions[currentPlayer] = 0;
+        } else {
+          positions[currentPlayer] += stepsMove;
+          if (positions[currentPlayer] < 0) positions[currentPlayer] = 0;
+        }
+        updateBoard();
+        updateTeacherTip();
+      } else if (currentEvent === "暫停一次") {
+        skipTurn[currentPlayer] = true;
+        document.getElementById('action-icon').innerHTML = '⏸️ 暫停一回合！';
+      }
+      setTimeout(() => moveSteps(steps - 1), 600);
     }
 
-    updateBoard();
-  updateTeacherTip();
-  updateTeacherTip();
-  function restartGame() {
-  positions = [0, 0];
-  scores = [0, 0];
-  skipTurn = [false, false];
-  currentPlayer = 0;
-  document.getElementById('status').textContent = '';
-  document.getElementById('action-icon').textContent = '';
-  document.getElementById('question-box').style.display = 'none';
-  const overlay = document.querySelector('.victory-overlay');
-  if (overlay) overlay.remove();
-  updateBoard();
-  updateTeacherTip();
-  updateTeacherTip();
-  document.getElementById('roll-btn').disabled = false;
-  playSound(correct);
-}
-</script>
-<script>
-  
-function playSound(correct) {
-  const correctAudio = document.getElementById("audio-correct");
-  const wrongAudio = document.getElementById("audio-wrong");
-  [correctAudio, wrongAudio].forEach(audio => {
-    audio.pause();
-    audio.currentTime = 0;
-  });
-  (correct ? correctAudio : wrongAudio).play();
-}
-</script>
-<audio id="audio-correct" preload="auto" src="correct.mp3"></audio>
-<audio id="audio-wrong" preload="auto" src="wrong.mp3"></audio>
-<script>
-function playSound(correct) {
-  const correctAudio = document.getElementById("audio-correct");
-  const wrongAudio = document.getElementById("audio-wrong");
-  [correctAudio, wrongAudio].forEach(audio => {
-    audio.pause();
-    audio.currentTime = 0;
-  });
-  (correct ? correctAudio : wrongAudio).play();
-}
-</script>
-<!-- 得分動畫區 -->
-<div class="popup" id="score-popup" style="display: none;">
-<div class="popup-content" id="score-message">🏁 獲得 1 分，5 秒後繼續遊戲</div>
-</div>
-<style>
-.popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-.popup-content {
-  background: white;
-  padding: 2rem 3rem;
-  font-size: 2rem;
-  border-radius: 16px;
-  animation: popIn 0.5s ease;
-  box-shadow: 0 0 15px rgba(0,0,0,0.3);
-}
-@keyframes popIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-</style>
-<script>
-function showScorePopup(playerName) {
-  const popup = document.getElementById("score-popup");
-  const message = document.getElementById("score-message");
-  message.innerText = `🏁 ${playerName} 獲得 1 分，5 秒後繼續遊戲`;
-  popup.style.display = "flex";
-  setTimeout(() => {
-    popup.style.display = "none";
-  }, 5000);
-}
-function showVictory(playerName) {
-  const popup = document.getElementById("score-popup");
-  const message = document.getElementById("score-message");
-  message.innerText = `🏆 ${playerName} 獲勝啦！`;
-  popup.style.display = "flex";
-}
-</script>
-<div id="score-float" style="display:none;">+1 分！</div>
-<div id="win-screen" style="display:none;">
-<div style="text-align: center;">
-<div class="trophy" style="font-size: 6rem; margin-bottom: 1rem;">🏆</div>
-<div style="font-size: 2.5rem; color: white;">過關成功！</div>
-</div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<script>
-function showScoreAnimation() {
-  const scoreSound = document.getElementById('audio-score'); if (scoreSound) { scoreSound.currentTime = 0; scoreSound.play(); }
-  const float = document.getElementById('score-float');
-  float.style.display = 'block';
-  float.style.animation = 'none';
-  float.offsetHeight; // reset animation
-  float.style.animation = 'floatUp 1s ease-out forwards';
-  setTimeout(() => {
-    float.style.display = 'none';
-  }, 1000);
-  confetti({
-    particleCount: 80,
-    spread: 100,
-    origin: { y: 0.6 }
-  });
-}
-function showWinScreen() {
-  const victorySound = document.getElementById('audio-victory'); if (victorySound) { victorySound.currentTime = 0; victorySound.play(); }
-  document.getElementById('win-screen').style.display = 'flex';
-  setTimeout(() => {
-    document.getElementById('win-screen').style.display = 'none';
-  }, 3000);
-}
-</script>
+    // 玩家回答結果處理（正確保留該格，錯誤還原原位置）
+    function judgeAnswer(correct) {
+      playSound(correct);
+      const rollBtn = document.getElementById("roll-btn");
+      const rollBtn2 = document.getElementById("roll-btn-duplicate");
+      // 若為手動模式且到達終點且答對，則計分與勝利判定
+      if (isManualMode && positions[currentPlayer] >= boardSize - 1 && correct) {
+        const playerName = currentPlayer === 0 ? '綠繡眼' : '藍鵲';
+        scores[currentPlayer]++;
+        if (scores[currentPlayer] >= 3) {
+          const overlay = document.createElement('div');
+          overlay.className = 'victory-overlay';
+          overlay.innerHTML = `
+            <div class='victory-banner'>
+              <h2>🎉 ${playerName} 獲勝！</h2>
+              <button onclick='restartGame()'>重新開始</button>
+            </div>`;
+          document.body.appendChild(overlay);
+          showWinScreen();
+          positions = [0, 0];
+          scores = [0, 0];
+          updateBoard();
+          updateTeacherTip();
+          return;
+        } else {
+          showScorePopup(playerName);
+          showScoreAnimation();
+          positions[currentPlayer] = 0;
+          updateBoard();
+          updateTeacherTip();
+          document.getElementById("question-box").style.display = "none";
+          manualMoveInProgress = false;
+          currentPlayer = 1 - currentPlayer;
+          updateTeacherTip();
+          // 解鎖骰子按鈕供下一位玩家擲骰
+          rollBtn.disabled = false;
+          rollBtn2.disabled = false;
+          return;
+        }
+      }
+      if (!correct) {
+        const prev = parseInt(document.getElementById('question-box').dataset.prev);
+        positions[currentPlayer] = isNaN(prev) ? positions[currentPlayer] : prev;
+        updateBoard();
+      }
+      document.getElementById("question-box").style.display = "none";
+      manualMoveInProgress = false;
+      currentPlayer = 1 - currentPlayer;
+      updateTeacherTip();
+      // 解鎖骰子按鈕，供下一位玩家擲骰
+      rollBtn.disabled = false;
+      rollBtn2.disabled = false;
+    }
 
-<audio id="audio-score" preload="auto" src="score.mp3"></audio>
-<audio id="audio-victory" preload="auto" src="victory.mp3"></audio>
+    function restartGame() {
+      positions = [0, 0];
+      scores = [0, 0];
+      skipTurn = [false, false];
+      currentPlayer = 0;
+      document.getElementById('status').textContent = '';
+      document.getElementById('action-icon').textContent = '';
+      document.getElementById('question-box').style.display = 'none';
+      const overlay = document.querySelector('.victory-overlay');
+      if (overlay) overlay.remove();
+      updateBoard();
+      updateTeacherTip();
+      document.getElementById('roll-btn').disabled = false;
+      document.getElementById('roll-btn-duplicate').disabled = false;
+      playSound(true);
+    }
+
+    function playSound(correct = true) {
+      const correctAudio = document.getElementById("audio-correct");
+      const wrongAudio = document.getElementById("audio-wrong");
+      [correctAudio, wrongAudio].forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+      });
+      (correct ? correctAudio : wrongAudio).play();
+    }
+
+    function showScorePopup(playerName) {
+      const popup = document.getElementById("score-popup");
+      const message = document.getElementById("score-message");
+      message.innerText = `🏁 ${playerName} 獲得 1 分，5 秒後繼續遊戲`;
+      popup.style.display = "flex";
+      setTimeout(() => {
+        popup.style.display = "none";
+      }, 5000);
+    }
+
+    function showScoreAnimation() {
+      const scoreSound = document.getElementById('audio-score');
+      if (scoreSound) { scoreSound.currentTime = 0; scoreSound.play(); }
+      const float = document.getElementById('score-float');
+      float.style.display = 'block';
+      float.style.animation = 'none';
+      float.offsetHeight;
+      float.style.animation = 'floatUp 1s ease-out forwards';
+      setTimeout(() => {
+        float.style.display = 'none';
+      }, 1000);
+      confetti({
+        particleCount: 80,
+        spread: 100,
+        origin: { y: 0.6 }
+      });
+    }
+
+    function showWinScreen() {
+      const victorySound = document.getElementById('audio-victory');
+      if (victorySound) { victorySound.currentTime = 0; victorySound.play(); }
+      document.getElementById('win-screen').style.display = 'flex';
+      setTimeout(() => {
+        document.getElementById('win-screen').style.display = 'none';
+      }, 3000);
+    }
+
+    // 模式切換：切換時僅更新模式變數與教師提示（骰子按鈕始終顯示）
+    document.getElementById("toggle-mode").addEventListener("change", function() {
+      isManualMode = this.checked;
+      updateTeacherTip();
+    });
+
+    // 初始化提示與棋盤
+    updateTeacherTip();
+    updateBoard();
+  </script>
+  <audio id="audio-score" preload="auto" src="score.mp3"></audio>
+  <audio id="audio-victory" preload="auto" src="victory.mp3"></audio>
 </body>
 </html>
