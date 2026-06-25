@@ -2,702 +2,1166 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>環保小尖兵大富翁</title>
   <style>
+    :root {
+      --ink: #243042;
+      --muted: #667085;
+      --paper: rgba(255, 255, 255, 0.93);
+      --blue: #1f9cf0;
+      --green: #22b573;
+      --gold: #ffd447;
+      --red: #f35b5b;
+      --purple: #8c6dfd;
+      --cell-width: clamp(100px, min(10.5vw, 14vh), 162px);
+      --cell-height: clamp(70px, min(7.2vw, 8vh), 96px);
+      --gap: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: sans-serif;
-      text-align: center;
-      background-image: url('https://www.chses.tyc.edu.tw/UpFile/Cairo1680/backgroung.png');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       min-height: 100vh;
       margin: 0;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      color: #000;
-      font-size: 1.2rem;
+      font-family: "Arial", "Noto Sans TC", sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(120deg, rgba(11, 74, 125, 0.68), rgba(36, 126, 96, 0.48)),
+        url("backgroung.png") center / cover no-repeat fixed;
     }
-    .container {
-      width: 100%;
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      filter: grayscale(0.55);
+      opacity: 0.7;
+    }
+
+    .app {
+      width: min(100%, 1580px);
+      min-height: 100vh;
       margin: 0 auto;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 0 20px;
-      gap: 10px;
-      box-sizing: border-box;
-    }
-    .board {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      grid-auto-rows: 150px;
-      grid-gap: 4px;
-      position: relative;
-      width: 1200px;
-      margin: 0 auto;
-    }
-    .cell {
-      height: 150px;
-      min-height: unset;
-      border: 1px solid #000;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.2rem;
-      text-align: center;
-      background-color: #f0f0f0;
-      position: relative;
-      padding: 12px 16px;
-      box-sizing: border-box;
-      word-break: break-word;
+      gap: 14px;
     }
-    .cell-text {
+
+    .top-bar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 18px;
+      border: 3px solid rgba(255, 255, 255, 0.7);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: 0 16px 42px rgba(13, 35, 58, 0.25);
+    }
+
+    .title {
+      margin: 0;
+      color: #0f3558;
+      font-size: clamp(2rem, 4vw, 4rem);
+      text-align: center;
+      text-shadow: 0 2px 0 #fff2a8;
+      white-space: nowrap;
+    }
+
+    .top-actions {
+      justify-self: end;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+
+    .top-action-button,
+    .mode-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: 0;
+      border-radius: 8px;
+      font-size: clamp(1rem, 1.25vw, 1.18rem);
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .top-action-button {
+      background: #24445e;
+      color: #fff;
+    }
+
+    .mode-toggle {
+      background: #eff8ff;
+      color: #0c5489;
+      border: 2px solid transparent;
+    }
+
+    .mode-toggle.active {
+      background: #fff7d1;
+      border-color: #ffb703;
+      color: #9a4d00;
+    }
+
+    .score-strip {
+      display: flex;
+      gap: 12px;
+      justify-self: start;
+    }
+
+    .score-card {
+      min-width: 150px;
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-weight: 900;
+      background: #fff;
+      border: 3px solid transparent;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .score-card::after {
+      content: "先攻";
+      position: absolute;
+      top: -12px;
+      right: -10px;
+      display: none;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #ffb703;
+      color: #432b00;
+      font-size: 0.9rem;
+      font-weight: 1000;
+      box-shadow: 0 3px 10px rgba(67, 43, 0, 0.24);
+    }
+
+    .score-card.first-player::after {
+      display: block;
+    }
+
+    .score-card img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .score-card strong {
+      display: block;
+      font-size: 1.9rem;
+      line-height: 1;
+    }
+
+    .score-card.green-bird {
+      border-color: var(--green);
+      color: #12864f;
+    }
+
+    .score-card.blue-bird {
+      border-color: var(--blue);
+      color: #07649e;
+    }
+
+    .game-shell {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 4px;
+      min-height: 0;
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(9, var(--cell-width));
+      grid-template-rows: repeat(8, var(--cell-height));
+      gap: var(--gap);
+      padding: var(--gap);
+      border-radius: 8px;
+      background: rgba(20, 78, 115, 0.54);
+      box-shadow: 0 22px 56px rgba(0, 0, 0, 0.36);
+      position: relative;
+    }
+
+    .center-panel {
+      grid-column: 2 / 9;
+      grid-row: 2 / 8;
+      z-index: 2;
+      display: grid;
+      grid-template-rows: auto minmax(260px, 1fr) auto auto;
+      row-gap: clamp(6px, 0.8vw, 10px);
+      padding: clamp(12px, 1.4vw, 20px);
+      border: 5px solid rgba(255, 255, 255, 0.8);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(239, 248, 255, 0.94));
+      box-shadow: inset 0 0 0 2px rgba(15, 53, 88, 0.08);
       text-align: center;
-      line-height: 1.4;
-      font-size: clamp(0.9rem, 1.1vw, 1.2rem);
-      overflow: visible;
     }
-    .cell img {
-      width: 48px;
-      height: 48px;
-      margin-bottom: 4px;
-    }
-    .highlight {
-      background-color: #ffeb3b;
-      animation: pulse 0.8s ease-in-out 2;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.08); }
-      100% { transform: scale(1); }
-    }
-    .victory-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
+
+    .turn-card {
+      min-height: 64px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      z-index: 9999;
-      animation: fadeIn 1s ease-in-out;
+      justify-content: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      background: #fff7d1;
+      border: 3px solid #ffc73d;
+      font-size: clamp(1.55rem, 2.6vw, 3rem);
+      font-weight: 900;
+      color: #9a4d00;
     }
-    .victory-banner {
-      background: #fff;
-      padding: 40px;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      text-align: center;
-      animation: popIn 0.6s ease;
-    }
-    .victory-banner h2 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      color: #d32f2f;
-    }
-    .victory-banner button {
-      font-size: 1.5rem;
-      padding: 10px 30px;
-      margin-top: 10px;
-      background: #4caf50;
-      color: white;
-      border: none;
+
+    .turn-card img {
+      width: 48px;
+      height: 58px;
       border-radius: 10px;
+      object-fit: contain;
+      background: #fff;
+      border: 3px solid currentColor;
+    }
+
+    .dice-row {
+      display: grid;
+      grid-template-columns: minmax(260px, 1fr) minmax(170px, 0.48fr);
+      gap: clamp(20px, 2.2vw, 34px);
+    }
+
+    .roll-button {
+      min-height: 62px;
+      border: 0;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #ffe66b, #ffb703);
+      color: #432b00;
+      font-size: clamp(1.8rem, 2.7vw, 3.2rem);
+      font-weight: 1000;
+      box-shadow: 0 8px 0 #b96f00, 0 16px 28px rgba(117, 70, 0, 0.26);
+    }
+
+    .roll-button:active:not(:disabled) {
+      transform: translateY(5px);
+      box-shadow: 0 3px 0 #b96f00, 0 8px 18px rgba(117, 70, 0, 0.24);
+    }
+
+    .dice-display {
+      min-height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 24% 24%, rgba(255, 255, 255, 0.96), rgba(255, 250, 242, 0.72) 42%, rgba(236, 241, 232, 0.74)),
+        linear-gradient(120deg, #fff8ef, #f2f8ed);
+      color: #dc2f2f;
+      font-size: clamp(3.2rem, 4.9vw, 5.9rem);
+      font-weight: 900;
+      box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.55), 0 6px 16px rgba(24, 44, 67, 0.18);
+    }
+
+    .dice-result {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(16px, 1.6vw, 28px);
+      width: 100%;
+    }
+
+    .dice-cube {
+      width: clamp(42px, 3.7vw, 58px);
+      height: clamp(42px, 3.7vw, 58px);
+      position: relative;
+      flex: 0 0 auto;
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at 72% 22%, rgba(255, 255, 255, 0.92), transparent 18%),
+        linear-gradient(145deg, #fbfbfb 0%, #d9dcdd 48%, #aeb4b7 100%);
+      box-shadow: 0 14px 18px rgba(36, 48, 66, 0.25), inset -9px -10px 16px rgba(98, 110, 118, 0.25), inset 8px 8px 14px #fff;
+      transform: rotate(-10deg);
+    }
+
+    .dice-cube::before {
+      content: "";
+      position: absolute;
+      inset: -7px 10px auto 10px;
+      height: 18px;
+      border-radius: 14px 14px 6px 6px;
+      background: linear-gradient(180deg, #ffffff, #d8dddd);
+      transform: skewX(-22deg);
+      opacity: 0.82;
+    }
+
+    .pip {
+      position: absolute;
+      width: 13%;
+      height: 13%;
+      border-radius: 999px;
+      background: #24282d;
+      box-shadow: inset -1px -1px 2px rgba(255, 255, 255, 0.25);
+    }
+
+    .pip.center {
+      background: #d92929;
+    }
+
+    .pip.tl { left: 22%; top: 22%; }
+    .pip.tr { right: 22%; top: 22%; }
+    .pip.ml { left: 22%; top: 44%; }
+    .pip.mr { right: 22%; top: 44%; }
+    .pip.bl { left: 22%; bottom: 22%; }
+    .pip.br { right: 22%; bottom: 22%; }
+    .pip.center { left: 43.5%; top: 43.5%; }
+
+    .dice-number {
+      color: #df2d2d;
+      font-size: clamp(2.9rem, 4.2vw, 5rem);
+      font-weight: 1000;
+      line-height: 1;
+    }
+
+    .dice-shake {
+      display: inline-block;
+      animation: shakeDice 0.52s ease-in-out;
+    }
+
+    .message-card {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      align-content: stretch;
+      gap: clamp(18px, 2vw, 32px);
+      min-height: 260px;
+      padding: clamp(22px, 2.4vw, 36px) 18px;
+      border-radius: 8px;
+      background: #ffffff;
+      border: 3px solid #d0e8fa;
+      box-shadow: inset 0 0 0 2px #f4fbff;
+    }
+
+    .status {
+      margin: 0;
+      align-self: end;
+      color: #2d5f7f;
+      font-size: clamp(1.3rem, 2vw, 2.1rem);
+      font-weight: 900;
+    }
+
+    .question {
+      margin: 0;
+      align-self: start;
+      color: #111827;
+      font-size: clamp(2rem, 3.2vw, 3.7rem);
+      line-height: 1.25;
+      font-weight: 1000;
+    }
+
+    .judge-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      align-self: end;
+    }
+
+    .judge-buttons[hidden] {
+      display: none;
+    }
+
+    .judge-buttons button {
+      min-height: 62px;
+      border: 0;
+      border-radius: 8px;
+      color: #fff;
+      font-size: clamp(1.35rem, 2vw, 2.2rem);
+      font-weight: 900;
+    }
+
+    .correct {
+      background: linear-gradient(180deg, #37cc82, #12864f);
+    }
+
+    .wrong {
+      background: linear-gradient(180deg, #ff7474, #c82727);
+    }
+
+    .rules {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(0.92rem, 1.18vw, 1.18rem);
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
+    .cell {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      align-items: start;
+      min-width: 0;
+      padding: 6px 8px;
+      border: 3px solid rgba(36, 48, 66, 0.58);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: inset 0 -5px 0 rgba(0, 0, 0, 0.08);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, outline-color 0.18s ease;
+    }
+
+    .cell.active {
+      z-index: 3;
+      outline: 6px solid #ffed72;
+      box-shadow: 0 0 26px rgba(255, 230, 80, 0.9), inset 0 -5px 0 rgba(0, 0, 0, 0.08);
+      transform: translateY(-4px);
+    }
+
+    .cell.manual-ready {
       cursor: pointer;
     }
-    @keyframes popIn {
-      0% { transform: scale(0.5); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+
+    .cell.manual-ready:hover {
+      transform: translateY(-3px);
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+
+    .cell-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      font-size: clamp(0.72rem, 0.82vw, 0.95rem);
+      color: rgba(36, 48, 66, 0.68);
+      font-weight: 900;
     }
-    @keyframes shakeDice {
-      0% { transform: rotate(0deg); }
-      25% { transform: rotate(20deg); }
-      50% { transform: rotate(-20deg); }
-      75% { transform: rotate(10deg); }
-      100% { transform: rotate(0deg); }
+
+    .cell-icon {
+      font-size: clamp(1.05rem, 1.35vw, 1.7rem);
+      line-height: 1;
     }
-    .dice-shake {
-      color: #d32f2f;
-      font-weight: bold;
-      display: inline-block;
-      animation: shakeDice 0.5s ease-in-out;
+
+    .cell-title {
+      display: none;
+      place-items: center;
+      flex: 1;
+      min-height: 0;
+      color: #182230;
+      font-size: clamp(1.05rem, 1.35vw, 1.55rem);
+      line-height: 1.16;
+      font-weight: 1000;
+      text-align: center;
+      word-break: break-word;
     }
-    @keyframes floatUp {
-      0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(-50px); opacity: 0; }
+
+    .cell-badge {
+      display: none;
     }
-    #score-float {
+
+    .type-start {
+      background: linear-gradient(180deg, #fff2a8, #ffd447);
+      border-color: #b77c00;
+    }
+
+    .type-finish {
+      background: linear-gradient(180deg, #ffe2e2, #ff8585);
+      border-color: #b51e1e;
+    }
+
+    .type-question {
+      background: linear-gradient(180deg, #ffffff, #e8f6ff);
+      border-color: #56a9e4;
+    }
+
+    .type-forward {
+      background: linear-gradient(180deg, #eafff3, #9cebc3);
+      border-color: #14945a;
+    }
+
+    .type-back {
+      background: linear-gradient(180deg, #fff1f1, #ffb2b2);
+      border-color: #d94141;
+    }
+
+    .type-return {
+      background: linear-gradient(180deg, #f0eaff, #c7b9ff);
+      border-color: #7661d8;
+    }
+
+    .player-stack {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      z-index: 4;
+      transform: translate(-50%, -50%);
+    }
+
+    .token {
+      width: clamp(30px, 2.7vw, 44px);
+      height: clamp(30px, 2.7vw, 44px);
+      border: 2px solid #fff;
+      border-radius: 999px;
+      object-fit: contain;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+    }
+
+    .token.green-bird {
+      outline: 3px solid var(--green);
+    }
+
+    .token.blue-bird {
+      outline: 3px solid var(--blue);
+    }
+
+    .floating-score {
       position: fixed;
-      top: 40%;
+      top: 42%;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 4rem;
-      color: #ff4081;
-      font-weight: bold;
-      animation: floatUp 1s ease-out forwards;
+      display: none;
       pointer-events: none;
-      z-index: 9999;
+      z-index: 20;
+      color: #ff2f70;
+      font-size: clamp(3rem, 7vw, 7rem);
+      font-weight: 1000;
+      text-shadow: 0 5px 0 #fff;
     }
-    @keyframes popTrophy {
-      0% { transform: scale(0); opacity: 0; }
-      50% { transform: scale(1.2); opacity: 1; }
-      100% { transform: scale(1); }
-    }
-    #win-screen {
+
+    .overlay {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-      display: flex;
-      justify-content: center;
+      inset: 0;
+      z-index: 30;
+      display: none;
       align-items: center;
-      z-index: 9998;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(9, 20, 33, 0.72);
     }
-    #win-screen .trophy {
-      font-size: 6rem;
-      animation: popTrophy 1s ease;
-      color: gold;
+
+    .overlay-card {
+      width: min(720px, 92vw);
+      padding: 42px;
+      border-radius: 8px;
+      background: #fff;
       text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.38);
+      animation: popIn 0.34s ease;
     }
-    .popup {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
+
+    .overlay-card h2 {
+      margin: 0 0 18px;
+      color: #b51e1e;
+      font-size: clamp(2.5rem, 5vw, 5rem);
     }
-    .popup-content {
-      background: white;
-      padding: 2rem 3rem;
-      font-size: 2rem;
-      border-radius: 16px;
-      animation: popIn 0.5s ease;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+
+    .overlay-card p {
+      margin: 0 0 24px;
+      font-size: clamp(1.4rem, 2.5vw, 2.4rem);
+      font-weight: 900;
+    }
+
+    .overlay-card button {
+      border: 0;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #37cc82, #12864f);
+      color: #fff;
+      padding: 16px 34px;
+      font-size: clamp(1.3rem, 2.2vw, 2rem);
+      font-weight: 900;
+    }
+
+    @keyframes shakeDice {
+      0% { transform: rotate(0deg) scale(1); }
+      25% { transform: rotate(18deg) scale(1.08); }
+      50% { transform: rotate(-18deg) scale(1.08); }
+      75% { transform: rotate(10deg) scale(1.05); }
+      100% { transform: rotate(0deg) scale(1); }
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.88); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes floatUp {
+      0% { transform: translate(-50%, 10px) scale(0.9); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translate(-50%, -80px) scale(1.1); opacity: 0; }
+    }
+
+    @media (max-width: 1100px) {
+      :root {
+        --cell-width: min(11.5vw, 108px);
+        --cell-height: min(8.5vw, 74px);
+        --gap: 6px;
+      }
+
+      .app {
+        padding: 10px;
+      }
+
+      .top-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .score-strip,
+      .top-actions {
+        justify-self: center;
+      }
+
+      .title {
+        white-space: normal;
+      }
     }
   </style>
 </head>
 <body>
-  <h1 style="font-size: 4rem; color: #ffeb3b; text-shadow: 3px 3px 6px #000; font-weight: bold; margin-bottom: 20px;">🌏 環保小尖兵大富翁 🌿</h1>
-  <!-- 模式切換開關 -->
-  <div id="mode-switch" style="margin-bottom:20px; font-size:1.8rem;">
-    <label>
-      <input type="checkbox" id="toggle-mode"> 切換到手動模式
-    </label>
-  </div>
-  <div class="container">
-    <div style="flex: 0 0 400px; display: flex; flex-direction: column; align-items: center; gap: 20px; font-size: 2rem; margin-top: 20px; background-color: rgba(255,255,255,0.85); padding: 20px; border-radius: 10px;">
-      <div id="teacher-tip" style="font-size: 2.4rem; font-weight: bold; color: darkorange; text-align: center;">👉 輪到 <img src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player1.png" style="width: 48px; vertical-align: middle; margin-right: 6px;"><span style="color: deepskyblue; font-weight: bold;">藍鵲</span> 擲骰子</div>
-      <button id="roll-btn" onclick="rollDice()" style="display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 3/1; font-size: 2.4rem; padding: 0; border-radius: 20px; background: #ffeb3b; border: 3px solid #333; white-space: nowrap;">🎲 擲骰子</button>
-      <div id="dice-animation" style="font-size: 5rem; text-align: center; height: 80px; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #d32f2f;">🎲 1</div>
-      <p id="status" style="font-size: 2.4rem; font-weight: bold; min-height: 2.2rem; white-space: nowrap; color: red;"></p>
-      <div id="question-box" style="display:none; max-width: 90vw; padding: 10px; background-color: rgba(255,255,255,0.9); border-radius: 10px; font-size: 1.4rem;">
-        <p id="question"></p>
-        <div class="decision-buttons">
-          <button onclick="judgeAnswer(true)" style="font-size: 1.5rem;">⭕ 答對</button>
-          <button onclick="judgeAnswer(false)" style="font-size: 1.5rem;">❌ 答錯</button>
+  <main class="app">
+    <header class="top-bar">
+      <div class="score-strip" aria-label="分數統計">
+        <div class="score-card green-bird first-player" data-player="0" role="button" tabindex="0" aria-label="設定綠繡眼先攻">
+          <img src="player2.png" alt="綠繡眼">
+          <div>綠繡眼<strong id="score-green">0</strong></div>
+        </div>
+        <div class="score-card blue-bird" data-player="1" role="button" tabindex="0" aria-label="設定藍鵲先攻">
+          <img src="player1.png" alt="藍鵲">
+          <div>藍鵲<strong id="score-blue">0</strong></div>
         </div>
       </div>
-      <div id="action-icon" style="font-size: 2rem; color: red; font-weight: bold;"></div>
-    </div>
-    <div class="board" id="board"></div>
-    <div style="flex: 0 0 400px; display: flex; flex-direction: column; align-items: center; gap: 20px; font-size: 2rem; margin-top: 20px; background-color: rgba(255,255,255,0.85); padding: 20px; border-radius: 10px;">
-      <div style="font-size: 2.4rem; font-weight: bold; margin-bottom: 10px;">🎯 分數統計</div>
-      <div style="background: #e0f7fa; padding: 10px 20px; border-radius: 8px; width: calc(100% - 10px); text-align: left; box-sizing: border-box;">
-        <img alt="藍鵲" src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player1.png" style="width:48px; vertical-align: middle; margin-right: 6px;"/>藍鵲： <span id="score-blue">0</span> 分
+      <h1 class="title">環保小尖兵大富翁</h1>
+      <div class="top-actions">
+        <button class="top-action-button" id="restart-button" type="button">重新開始</button>
+        <button class="mode-toggle" id="manual-mode" type="button" aria-pressed="false">自動模式</button>
       </div>
-      <div style="background: #e8eaf6; padding: 10px 20px; border-radius: 8px; width: calc(100% - 10px); text-align: left; box-sizing: border-box;">
-        <img alt="綠繡眼" src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player2.png" style="width:48px; vertical-align: middle; margin-right: 6px;"/>綠繡眼： <span id="score-green">0</span> 分
+    </header>
+
+    <section class="game-shell" aria-label="遊戲區">
+      <div class="board" id="board">
+        <section class="center-panel" aria-label="操作面板">
+          <div class="turn-card" id="turn-card"></div>
+
+          <div class="message-card">
+            <p class="status" id="status">按下擲骰子開始遊戲</p>
+            <p class="question" id="question">走到題目格後，老師按答對或答錯。</p>
+            <div class="judge-buttons" id="judge-buttons" hidden>
+              <button class="correct" id="correct-button" type="button">答對</button>
+              <button class="wrong" id="wrong-button" type="button">答錯</button>
+            </div>
+          </div>
+
+          <div class="dice-row">
+            <button class="roll-button" id="roll-button" type="button">擲骰子</button>
+            <div class="dice-display" id="dice-display"></div>
+          </div>
+
+          <p class="rules" id="rules">
+            規則：兩隊輪流擲骰，答對留在新格，答錯退回原格。抵達終點得 1 分並回到起點，先得 3 分獲勝。
+          </p>
+        </section>
       </div>
-      <div style="margin-top: 20px; font-size: 1.2rem; line-height: 1.6;">
-        📜 <strong>遊戲規則：</strong><br/>雙方輪流擲骰前進，第一位獲得 3 分的隊伍即獲勝！
-      </div>
-      <button id="roll-btn-duplicate" onclick="rollDice()" style="display: block; width: 100%; margin-top: 12px; padding: 10px; font-size: 1.8rem; border-radius: 12px; background: #ffeb3b; border: 3px solid #333; box-sizing: border-box;">🎲 擲骰子</button>
-      <div id="dice-animation-2" style="font-size: 5rem; text-align: center; height: 80px; display: flex; justify-content: center; align-items: center; font-weight: bold; color: #d32f2f;">🎲 1</div>
+    </section>
+  </main>
+
+  <div class="floating-score" id="score-float">+1 分</div>
+
+  <div class="overlay" id="overlay">
+    <div class="overlay-card">
+      <h2 id="overlay-title">過關成功</h2>
+      <p id="overlay-message"></p>
+      <button id="overlay-button" type="button">繼續遊戲</button>
     </div>
   </div>
+
   <audio id="audio-correct" preload="auto" src="correct.mp3"></audio>
   <audio id="audio-wrong" preload="auto" src="wrong.mp3"></audio>
-  <!-- 得分動畫區 -->
-  <div class="popup" id="score-popup" style="display: none;">
-    <div class="popup-content" id="score-message">🏁 獲得 1 分，5 秒後繼續遊戲</div>
-  </div>
-  <div id="score-float" style="display:none;">+1 分！</div>
-  <div id="win-screen" style="display:none;">
-    <div style="text-align: center;">
-      <div class="trophy" style="font-size: 6rem; margin-bottom: 1rem;">🏆</div>
-      <div style="font-size: 2.5rem; color: white;">過關成功！</div>
-    </div>
-  </div>
+  <audio id="audio-score" preload="auto" src="score.mp3"></audio>
+  <audio id="audio-victory" preload="auto" src="victory.mp3"></audio>
+
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script>
-    // 遊戲規則與變數宣告
-    const layout = [
+    const rawSquares = [
       "起點",
       "你參加過跳蚤市場嗎",
       "說出一種台灣特有種動物",
       "亂砍樹木會發生什麼事",
       "回到起點",
-      "說出一個暖化對地球的傷害", 
-      "說出空氣汙染對人體的傷害",    
-      "你拿什麼製作環保清潔劑",    
+      "說出一個暖化對地球的傷害",
+      "說出空氣汙染對人體的傷害",
+      "你拿什麼製作環保清潔劑",
       "前進兩步",
-      "怎麼保護動物",    
-      "說出塑膠對海洋生物的傷害",    
-      "用過的紙盒還可以做什麼",    
-      "前進三步",  
-      "洗米水還可以拿來做什麼",  
-      "舉出一種減塑的方法", 
+      "怎麼保護動物",
+      "說出塑膠對海洋生物的傷害",
+      "用過的紙盒還可以做什麼",
+      "前進三步",
+      "洗米水還可以拿來做什麼",
+      "舉出一種減塑的方法",
       "說出一種低污染的交通工具",
-      "後退兩步",   
-      "節電行動：關閉一盞電風扇",   
-      "吹冷氣會造成地球暖化嗎",   
-      "走路上學可以減少空汙嗎",   
-      "我們怎麼愛護山林",  
-      "台灣減塑有什麼規定",   
+      "後退兩步",
+      "節電行動：關閉一盞電風扇",
+      "吹冷氣會造成地球暖化嗎",
+      "走路上學可以減少空汙嗎",
+      "我們怎麼愛護山林",
+      "台灣減塑有什麼規定",
       "後退兩步",
       "冰山融化會傷害什麼動物",
       "怎麼愛惜食物",
       "說出一種瀕臨絕種的動物",
-      "節水行動：檢查走廊水龍頭", 
-      "污水處理廠在做什麼",  
+      "節水行動：檢查走廊水龍頭",
+      "污水處理廠在做什麼",
       "我愛地球說三次",
       "終點"
     ];
-    const specialMove = {
-      "前進兩步": 2,
-      "前進三步": 3,
-      "後退兩步": -2,
-      "回到起點": "start"
-    };
-    const boardSize = layout.length;
-    let positions = [0, 0];
-    let scores = [0, 0];
-    let currentPlayer = 0;
-    let skipTurn = [false, false];
 
-    // 模式相關全域變數（預設為自動模式）
-    let isManualMode = false;
-    let manualMoveInProgress = false;
-    let manualOldPos = 0;
-    let manualDiceRoll = 0; // 用來記錄手動模式下擲出的骰子點數
-
-    const boardEl = document.getElementById('board');
-    const playerImages = [
-      'https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player2.png', // 綠繡眼
-      'https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player1.png'  // 藍鵲
+    const players = [
+      { name: "綠繡眼", shortName: "綠繡眼", image: "player2.png", className: "green-bird", color: "#12864f" },
+      { name: "藍鵲", shortName: "藍鵲", image: "player1.png", className: "blue-bird", color: "#1f9cf0" }
     ];
 
-    // 建立棋盤
-    for (let row = 0; row < 5; row++) {
-      for (let col = 0; col < 6; col++) {
-        let index = row * 6 + (row % 2 === 0 ? col : 5 - col);
-        if (index >= boardSize) continue;
-        const cell = document.createElement('div');
-        cell.className = 'cell';
-        cell.id = `cell-${index}`;
-        let arrow = '➡️';
-        if (col === 5 && row % 2 === 0 && row < 4) arrow = '⬇️';
-        else if (col === 0 && row % 2 === 1 && row < 4) arrow = '⬇️';
-        else if (row % 2 === 1) arrow = '⬅️';
-        cell.innerHTML = `<div class='cell-text'>${layout[index]}</div><div class='arrow'>${arrow}</div>`;
-        boardEl.appendChild(cell);
-      }
-    }
+    const boardPath = [
+      [8, 9], [8, 8], [8, 7], [8, 6], [8, 5], [8, 4], [8, 3], [8, 2], [8, 1],
+      [7, 1], [6, 1], [5, 1], [4, 1], [3, 1], [2, 1], [1, 1],
+      [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7], [1, 8], [1, 9],
+      [2, 9], [3, 9], [4, 9], [5, 9], [6, 9], [7, 9]
+    ];
 
-    // 為每個格子新增點擊事件（僅在手動模式且尚未移動中時觸發）
-    document.querySelectorAll('.cell').forEach(cell => {
-      cell.addEventListener('click', function() {
-        if (!isManualMode || manualMoveInProgress) return;
-        let parts = this.id.split("-");
-        if (parts.length < 2) return;
-        let targetIndex = parseInt(parts[1]);
-        if (isNaN(targetIndex)) return;
-        // 保存原本位置以供答錯時還原
-        manualOldPos = positions[currentPlayer];
-        document.getElementById('question-box').dataset.prev = manualOldPos;
-        manualMoveInProgress = true;
-        positions[currentPlayer] = targetIndex;
-        updateBoard();
-        document.getElementById('question').textContent = layout[targetIndex];
-        document.getElementById('question-box').style.display = 'block';
-      });
+    const squares = rawSquares.map((title, index) => {
+      if (index === 0) {
+        return { title, type: "start", icon: "GO", badge: "起點", question: "從起點出發，準備成為環保小尖兵！" };
+      }
+      if (index === rawSquares.length - 1) {
+        return { title, type: "finish", icon: "★", badge: "得分", question: "抵達終點，獲得 1 分！" };
+      }
+      if (title === "前進兩步") {
+        return { title, type: "forward", icon: "+2", badge: "獎勵", effect: { move: 2 }, question: "太棒了！前進 2 步。" };
+      }
+      if (title === "前進三步") {
+        return { title, type: "forward", icon: "+3", badge: "獎勵", effect: { move: 3 }, question: "幸運加速！前進 3 步。" };
+      }
+      if (title === "後退兩步") {
+        return { title, type: "back", icon: "-2", badge: "挑戰", effect: { move: -2 }, question: "遇到挑戰，後退 2 步。" };
+      }
+      if (title === "回到起點") {
+        return { title, type: "return", icon: "↺", badge: "事件", effect: { moveTo: 0 }, question: "回到起點，重新出發！" };
+      }
+      return { title, type: "question", icon: "?", badge: "題目", question: title };
     });
 
-    // 更新教師提示（顯示當前玩家，若手動模式附加提示）
-    function updateTeacherTip() {
-      const tipEl = document.getElementById('teacher-tip');
-      const icon = currentPlayer === 0
-        ? '<img src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player2.png" style="width:48px; vertical-align:middle; margin-right:6px;">'
-        : '<img src="https://www.chses.tyc.edu.tw/UpFile/Cairo1680/player1.png" style="width:48px; vertical-align:middle; margin-right:6px;">';
-      const name = currentPlayer === 0
-        ? '<span style="color: limegreen; font-weight: bold;">綠繡眼</span>'
-        : '<span style="color: deepskyblue; font-weight: bold;">藍鵲</span>';
-      let tipMsg = `👉 輪到 ${icon}${name} 擲骰子`;
-      if (isManualMode) {
-        tipMsg += " 【手動模式：請點選棋盤移動】";
-      }
-      tipEl.innerHTML = tipMsg;
+    const boardEl = document.getElementById("board");
+    const turnCardEl = document.getElementById("turn-card");
+    const scoreCards = document.querySelectorAll(".score-card");
+    const rollButton = document.getElementById("roll-button");
+    const diceDisplay = document.getElementById("dice-display");
+    const statusEl = document.getElementById("status");
+    const questionEl = document.getElementById("question");
+    const judgeButtons = document.getElementById("judge-buttons");
+    const correctButton = document.getElementById("correct-button");
+    const wrongButton = document.getElementById("wrong-button");
+    const restartButton = document.getElementById("restart-button");
+    const rulesEl = document.getElementById("rules");
+    const manualModeEl = document.getElementById("manual-mode");
+    const overlay = document.getElementById("overlay");
+    const overlayTitle = document.getElementById("overlay-title");
+    const overlayMessage = document.getElementById("overlay-message");
+    const overlayButton = document.getElementById("overlay-button");
+    const scoreFloat = document.getElementById("score-float");
+
+    let positions = [0, 0];
+    let scores = [0, 0];
+    let startingPlayer = 0;
+    let currentPlayer = 0;
+    let isBusy = false;
+    let awaitingAnswer = false;
+    let previousPosition = 0;
+    let lastRoll = 1;
+    let manualMode = false;
+
+    function diceMarkup(value) {
+      const pipMap = {
+        1: ["center"],
+        2: ["tl", "br"],
+        3: ["tl", "center", "br"],
+        4: ["tl", "tr", "bl", "br"],
+        5: ["tl", "tr", "center", "bl", "br"],
+        6: ["tl", "tr", "ml", "mr", "bl", "br"]
+      };
+      const pips = (pipMap[value] || pipMap[1])
+        .map(position => `<span class="pip ${position}"></span>`)
+        .join("");
+      return `
+        <div class="dice-result">
+          <div class="dice-cube" aria-hidden="true">${pips}</div>
+          <div class="dice-number">${value}</div>
+        </div>
+      `;
     }
 
-    // 更新棋盤畫面（重繪棋盤及玩家圖示）
-    function updateBoard() {
-      layout.forEach((_, i) => {
-        const cell = document.getElementById(`cell-${i}`);
-        if (cell) {
-          const row = Math.floor(i / 6);
-          const col = row % 2 === 0 ? i % 6 : 5 - (i % 6);
-          let arrow = '➡️';
-          if (col === 5 && row % 2 === 0 && row < 4) arrow = '⬇️';
-          else if (col === 0 && row % 2 === 1 && row < 4) arrow = '⬇️';
-          else if (row % 2 === 1) arrow = '⬅️';
-          cell.innerHTML = `<div class='cell-text'>${layout[i]}</div><div class='arrow'>${arrow}</div>`;
-          cell.querySelectorAll('img').forEach(img => img.remove());
-        }
+    function buildBoard() {
+      squares.forEach((square, index) => {
+        const [row, column] = boardPath[index];
+        const cell = document.createElement("button");
+        cell.type = "button";
+        cell.className = `cell type-${square.type}`;
+        cell.id = `cell-${index}`;
+        cell.dataset.index = index;
+        cell.style.gridRow = row;
+        cell.style.gridColumn = column;
+        cell.setAttribute("aria-label", `${index + 1}. ${square.badge}`);
+        cell.innerHTML = `
+          <div class="cell-header">
+            <span>${String(index + 1).padStart(2, "0")}</span>
+            <span class="cell-icon">${square.icon}</span>
+          </div>
+          <div class="player-stack" aria-hidden="true"></div>
+        `;
+        cell.addEventListener("click", () => handleManualMove(index));
+        boardEl.appendChild(cell);
       });
-      positions.forEach((pos, idx) => {
-        const target = document.getElementById(`cell-${pos}`);
-        if (target) {
-          let container = target.querySelector('.player-container');
-          if (!container) {
-            container = document.createElement('div');
-            container.className = 'player-container';
-            container.style.display = 'flex';
-            container.style.gap = '4px';
-            container.style.justifyContent = 'center';
-            container.style.alignItems = 'center';
-            target.prepend(container);
-          }
-          const img = document.createElement('img');
-          img.src = playerImages[idx];
-          img.alt = `player${idx + 1}`;
-          if (pos > 0) {
-            const direction = pos % 12 < 6 ? 'right' : 'left';
-            img.style.transform = direction === 'left' ? 'scaleX(-1)' : 'scaleX(1)';
-          }
-          container.appendChild(img);
-        }
-      });
-      document.getElementById('score-green').textContent = scores[0];
-      document.getElementById('score-blue').textContent = scores[1];
     }
 
-    // 擲骰子函數：自動模式下依骰子點數移動；手動模式下僅顯示點數且鎖定骰子按鈕
+    function updateView() {
+      const player = players[currentPlayer];
+      turnCardEl.style.color = player.color;
+      turnCardEl.innerHTML = `
+        <img src="${player.image}" alt="${player.name}">
+        <span>輪到 ${player.name}</span>
+      `;
+
+      document.getElementById("score-green").textContent = scores[0];
+      document.getElementById("score-blue").textContent = scores[1];
+      scoreCards.forEach(card => {
+        const playerIndex = Number(card.dataset.player);
+        card.classList.toggle("first-player", playerIndex === startingPlayer);
+      });
+
+      squares.forEach((_, index) => {
+        const cell = document.getElementById(`cell-${index}`);
+        const stack = cell.querySelector(".player-stack");
+        stack.innerHTML = "";
+        cell.classList.toggle("active", positions.includes(index));
+        cell.classList.toggle("manual-ready", manualMode && !isBusy);
+      });
+
+      positions.forEach((position, playerIndex) => {
+        const stack = document.querySelector(`#cell-${position} .player-stack`);
+        const token = document.createElement("img");
+        token.className = `token ${players[playerIndex].className}`;
+        token.src = players[playerIndex].image;
+        token.alt = players[playerIndex].name;
+        stack.appendChild(token);
+      });
+
+      rollButton.disabled = isBusy || awaitingAnswer;
+      correctButton.disabled = !awaitingAnswer;
+      wrongButton.disabled = !awaitingAnswer;
+      judgeButtons.hidden = !awaitingAnswer;
+      manualModeEl.classList.toggle("active", manualMode);
+      manualModeEl.setAttribute("aria-pressed", String(manualMode));
+      manualModeEl.textContent = manualMode ? "手動模式" : "自動模式";
+    }
+
+    function setStatus(text, question = "") {
+      statusEl.textContent = text;
+      questionEl.textContent = question || "按下擲骰子，棋子會沿著外圈前進。";
+    }
+
     function rollDice() {
-      const rollBtn = document.getElementById("roll-btn");
-      const rollBtn2 = document.getElementById("roll-btn-duplicate");
-      if (!rollBtn) return;
-      rollBtn.disabled = true;
-      rollBtn2.disabled = true;
-      document.getElementById('action-icon').innerHTML = '';
+      if (isBusy || awaitingAnswer) return;
+      stopAnswerSounds();
+      isBusy = true;
+      previousPosition = positions[currentPlayer];
+      lastRoll = Math.floor(Math.random() * 6) + 1;
+      diceDisplay.innerHTML = `<span class="dice-shake">${diceMarkup(lastRoll)}</span>`;
 
-      if (skipTurn[currentPlayer]) {
-        skipTurn[currentPlayer] = false;
-        document.getElementById('action-icon').innerHTML = '⏸️ 暫停一回合！';
-        currentPlayer = 1 - currentPlayer;
-        updateTeacherTip();
-        rollBtn.disabled = false;
-        rollBtn2.disabled = false;
+      if (manualMode) {
+        isBusy = false;
+        setStatus(`${players[currentPlayer].name} 擲出 ${lastRoll} 點`, "手動移動模式：請老師點選棋盤上的目標格。");
+        updateView();
         return;
       }
 
-      const roll = Math.floor(Math.random() * 6) + 1;
-      const diceContainer = document.getElementById("dice-animation");
-      const diceContainer2 = document.getElementById("dice-animation-2");
-      diceContainer.innerHTML = `<span class="dice-shake">🎲 ${roll}</span>`;
-      diceContainer2.innerHTML = `<span class="dice-shake">🎲 ${roll}</span>`;
+      setStatus(`${players[currentPlayer].name} 擲出 ${lastRoll} 點`, "棋子移動中...");
+      updateView();
+      setTimeout(() => moveStepByStep(lastRoll), 480);
+    }
+
+    function finishLap(message) {
+      const winner = awardPoint(currentPlayer);
+      if (winner) return;
+      positions[currentPlayer] = 0;
+      setStatus(message, "獲得 1 分，回到起點，換下一隊。");
+      updateView();
+      showScoreMoment(message);
+      endTurn(1100);
+    }
+
+    function moveStepByStep(stepsLeft) {
+      if (stepsLeft <= 0) {
+        landOnSquare();
+        return;
+      }
+
+      positions[currentPlayer] += 1;
+      if (positions[currentPlayer] >= squares.length) {
+        finishLap(`${players[currentPlayer].name} 通過終點！`);
+        return;
+      }
+      if (positions[currentPlayer] === squares.length - 1) {
+        finishLap(`${players[currentPlayer].name} 抵達終點！`);
+        return;
+      }
+
+      updateView();
+      setTimeout(() => moveStepByStep(stepsLeft - 1), 360);
+    }
+
+    function landOnSquare() {
+      const square = squares[positions[currentPlayer]];
+      isBusy = false;
+
+      if (square.type === "start") {
+        setStatus("回到起點，換下一隊。", square.question);
+        endTurn();
+        return;
+      }
+
+      if (square.type === "finish") {
+        finishLap(`${players[currentPlayer].name} 抵達終點！`);
+        return;
+      }
+
+      if (square.effect) {
+        handleEffectSquare(square);
+        return;
+      }
+
+      awaitingAnswer = true;
+      setStatus(`${players[currentPlayer].name} 到達題目格`, square.question);
+      updateView();
+    }
+
+    function handleEffectSquare(square) {
+      setStatus(`${players[currentPlayer].name} 觸發特殊格`, square.question);
+      playSound(square.type === "forward");
+
       setTimeout(() => {
-        diceContainer.innerHTML = `🎲 ${roll}`;
-        diceContainer2.innerHTML = `🎲 ${roll}`;
-      }, 500);
-      const status = document.getElementById('status');
-      status.innerHTML = `<img src="${playerImages[currentPlayer]}" style="width:48px; vertical-align:middle; margin-right:6px;">${currentPlayer === 0 ? '綠繡眼' : '藍鵲'} 擲出 ${roll} 點`;
-      status.style.color = currentPlayer === 0 ? 'limegreen' : 'deepskyblue';
-      
-      if (isManualMode) {
-        // 手動模式下，保留骰子點數但持續鎖定骰子按鈕，等待玩家點選棋盤並答題
-        manualDiceRoll = roll;
-        return;
-      }
-      
-      // 自動模式：依骰子點數自動移動
-      let newPos = positions[currentPlayer] + roll;
-      if (newPos >= boardSize - 1) {
-        const playerName = currentPlayer === 0 ? '綠繡眼' : '藍鵲';
-        scores[currentPlayer]++;
-        if (scores[currentPlayer] >= 3) {
-          const overlay = document.createElement('div');
-          overlay.className = 'victory-overlay';
-          overlay.innerHTML = `
-            <div class='victory-banner'>
-              <h2>🎉 ${playerName} 獲勝！</h2>
-              <button onclick='restartGame()'>重新開始</button>
-            </div>`;
-          document.body.appendChild(overlay);
-          showWinScreen();
-          positions = [0, 0];
-          scores = [0, 0];
-          updateBoard();
-          updateTeacherTip();
+        if (square.effect.moveTo !== undefined) {
+          positions[currentPlayer] = square.effect.moveTo;
+          updateView();
+          endTurn(700);
           return;
-        } else {
-          showScorePopup(playerName);
-          showScoreAnimation();
-          const remainingSteps = newPos - (boardSize - 1);
-          positions[currentPlayer] = 0;
-          updateBoard();
-          setTimeout(() => moveSteps(remainingSteps), 800);
         }
-        if (scores[currentPlayer] >= 3) {
-          const overlay = document.createElement('div');
-          overlay.className = 'victory-overlay';
-          overlay.innerHTML = `
-            <div class='victory-banner'>
-              <h2>🎉 ${currentPlayer === 0 ? '綠繡眼' : '藍鵲'} 獲勝！</h2>
-              <button onclick='restartGame()'>重新開始</button>
-            </div>`;
-          document.body.appendChild(overlay);
-          showWinScreen();
-          positions = [0, 0];
-          scores = [0, 0];
-        } else {
-          positions[currentPlayer] = 0;
-        }
-        updateBoard();
-        updateTeacherTip();
-        rollBtn.disabled = false;
-        rollBtn2.disabled = false;
-        return;
-      }
-      positions[currentPlayer] = newPos;
-      updateBoard();
-      updateTeacherTip();
-      const currentEvent = layout[newPos];
-      const currentCell = document.getElementById(`cell-${newPos}`);
-      if (specialMove.hasOwnProperty(currentEvent) || currentEvent === '暫停一次') {
-        currentCell.classList.add('highlight');
-        playSound();
-        setTimeout(() => currentCell.classList.remove('highlight'), 1200);
-      }
-      if (specialMove.hasOwnProperty(currentEvent)) {
-        const steps = specialMove[currentEvent];
-        if (steps === "start") {
-          playSound(false);
-          positions[currentPlayer] = 0;
-        } else {
-          if (steps > 0) playSound(true);
-          else playSound(false);
-          positions[currentPlayer] += steps;
-          if (positions[currentPlayer] < 0) positions[currentPlayer] = 0;
-        }
-        updateBoard();
-        updateTeacherTip();
-        currentPlayer = 1 - currentPlayer;
-        updateTeacherTip();
-        rollBtn.disabled = false;
-        rollBtn2.disabled = false;
-        return;
-      }
-      if (currentEvent === "暫停一次") {
-        playSound(false);
-        skipTurn[currentPlayer] = true;
-        document.getElementById('action-icon').innerHTML = '⏸️ 暫停一回合！';
-        updateBoard();
-        updateTeacherTip();
-        currentPlayer = 1 - currentPlayer;
-        updateTeacherTip();
-        rollBtn.disabled = false;
-        rollBtn2.disabled = false;
-        return;
-      }
-      // 一般情況：出現問題讓玩家回答
-      document.getElementById('question').textContent = currentEvent;
-      document.getElementById('question-box').style.display = 'block';
-      document.getElementById('question-box').dataset.prev = newPos - roll;
+
+        const movement = square.effect.move || 0;
+        previousPosition = positions[currentPlayer];
+        moveEffectSteps(Math.abs(movement), movement > 0 ? 1 : -1);
+      }, 650);
     }
 
-    // moveSteps() 用於自動模式的補位動作
-    function moveSteps(steps) {
-      if (steps <= 0) {
-        currentPlayer = 1 - currentPlayer;
-        updateTeacherTip();
-        document.getElementById("roll-btn").disabled = false;
-        document.getElementById("roll-btn-duplicate").disabled = false;
+    function moveEffectSteps(stepsLeft, direction) {
+      if (stepsLeft <= 0) {
+        endTurn(700);
         return;
       }
-      positions[currentPlayer]++;
-      if (positions[currentPlayer] >= boardSize) positions[currentPlayer] = boardSize - 1;
-      updateBoard();
-      updateTeacherTip();
-      const currentEvent = layout[positions[currentPlayer]];
-      const currentCell = document.getElementById(`cell-${positions[currentPlayer]}`);
-      if (specialMove.hasOwnProperty(currentEvent)) {
-        const stepsMove = specialMove[currentEvent];
-        if (stepsMove === "start") {
-          positions[currentPlayer] = 0;
-        } else {
-          positions[currentPlayer] += stepsMove;
-          if (positions[currentPlayer] < 0) positions[currentPlayer] = 0;
-        }
-        updateBoard();
-        updateTeacherTip();
-      } else if (currentEvent === "暫停一次") {
-        skipTurn[currentPlayer] = true;
-        document.getElementById('action-icon').innerHTML = '⏸️ 暫停一回合！';
+
+      positions[currentPlayer] += direction;
+      if (positions[currentPlayer] < 0) positions[currentPlayer] = 0;
+      if (positions[currentPlayer] >= squares.length) {
+        finishLap(`${players[currentPlayer].name} 通過終點！`);
+        return;
       }
-      setTimeout(() => moveSteps(steps - 1), 600);
+      if (positions[currentPlayer] === squares.length - 1) {
+        finishLap(`${players[currentPlayer].name} 抵達終點！`);
+        return;
+      }
+
+      updateView();
+      setTimeout(() => moveEffectSteps(stepsLeft - 1, direction), 340);
     }
 
-    // 玩家回答結果處理（正確保留該格，錯誤還原原位置）
-    function judgeAnswer(correct) {
-      playSound(correct);
-      const rollBtn = document.getElementById("roll-btn");
-      const rollBtn2 = document.getElementById("roll-btn-duplicate");
-      // 若為手動模式且到達終點且答對，則計分與勝利判定
-      if (isManualMode && positions[currentPlayer] >= boardSize - 1 && correct) {
-        const playerName = currentPlayer === 0 ? '綠繡眼' : '藍鵲';
-        scores[currentPlayer]++;
-        if (scores[currentPlayer] >= 3) {
-          const overlay = document.createElement('div');
-          overlay.className = 'victory-overlay';
-          overlay.innerHTML = `
-            <div class='victory-banner'>
-              <h2>🎉 ${playerName} 獲勝！</h2>
-              <button onclick='restartGame()'>重新開始</button>
-            </div>`;
-          document.body.appendChild(overlay);
-          showWinScreen();
-          positions = [0, 0];
-          scores = [0, 0];
-          updateBoard();
-          updateTeacherTip();
-          return;
-        } else {
-          showScorePopup(playerName);
-          showScoreAnimation();
-          positions[currentPlayer] = 0;
-          updateBoard();
-          updateTeacherTip();
-          document.getElementById("question-box").style.display = "none";
-          manualMoveInProgress = false;
-          currentPlayer = 1 - currentPlayer;
-          updateTeacherTip();
-          // 解鎖骰子按鈕供下一位玩家擲骰
-          rollBtn.disabled = false;
-          rollBtn2.disabled = false;
-          return;
-        }
+    function judgeAnswer(isCorrect) {
+      if (!awaitingAnswer) return;
+      playSound(isCorrect);
+
+      if (!isCorrect) {
+        positions[currentPlayer] = previousPosition;
+        setStatus("答錯，退回原本的位置。", "沒關係，換下一隊繼續挑戰。");
+      } else {
+        setStatus("答對，留在新位置！", "做得好，換下一隊擲骰。");
       }
-      if (!correct) {
-        const prev = parseInt(document.getElementById('question-box').dataset.prev);
-        positions[currentPlayer] = isNaN(prev) ? positions[currentPlayer] : prev;
-        updateBoard();
+
+      awaitingAnswer = false;
+      updateView();
+      endTurn(850);
+    }
+
+    function endTurn(delay = 500) {
+      isBusy = true;
+      updateView();
+      setTimeout(() => {
+        currentPlayer = 1 - currentPlayer;
+        isBusy = false;
+        setStatus(`請 ${players[currentPlayer].name} 擲骰子`, "準備好就按下擲骰子。");
+        updateView();
+      }, delay);
+    }
+
+    function awardPoint(playerIndex) {
+      scores[playerIndex] += 1;
+      updateView();
+      showScoreAnimation();
+      playScoreSound();
+      if (scores[playerIndex] >= 3) {
+        showVictory(playerIndex);
+        return true;
       }
-      document.getElementById("question-box").style.display = "none";
-      manualMoveInProgress = false;
-      currentPlayer = 1 - currentPlayer;
-      updateTeacherTip();
-      // 解鎖骰子按鈕，供下一位玩家擲骰
-      rollBtn.disabled = false;
-      rollBtn2.disabled = false;
+      return false;
+    }
+
+    function showScoreMoment(message) {
+      overlayTitle.textContent = "獲得 1 分";
+      overlayMessage.textContent = `${message} 目前 ${players[currentPlayer].name} ${scores[currentPlayer]} 分。`;
+      overlayButton.textContent = "繼續遊戲";
+      overlayButton.onclick = () => {
+        overlay.style.display = "none";
+      };
+      overlay.style.display = "flex";
+      setTimeout(() => {
+        if (scores[currentPlayer] < 3) overlay.style.display = "none";
+      }, 1400);
+    }
+
+    function showVictory(playerIndex) {
+      isBusy = true;
+      awaitingAnswer = false;
+      playVictorySound();
+      overlayTitle.textContent = `${players[playerIndex].name} 獲勝！`;
+      overlayMessage.textContent = "恭喜完成環保小尖兵挑戰！";
+      overlayButton.textContent = "重新開始";
+      overlayButton.onclick = restartGame;
+      overlay.style.display = "flex";
+      if (window.confetti) {
+        window.confetti({ particleCount: 160, spread: 110, origin: { y: 0.55 } });
+      }
+      updateView();
+    }
+
+    function showScoreAnimation() {
+      scoreFloat.style.display = "block";
+      scoreFloat.style.animation = "none";
+      scoreFloat.offsetHeight;
+      scoreFloat.style.animation = "floatUp 1.1s ease-out forwards";
+      if (window.confetti) {
+        window.confetti({ particleCount: 70, spread: 90, origin: { y: 0.65 } });
+      }
+      setTimeout(() => {
+        scoreFloat.style.display = "none";
+      }, 1150);
+    }
+
+    function handleManualMove(index) {
+      if (!manualMode || isBusy || awaitingAnswer) return;
+      previousPosition = positions[currentPlayer];
+      positions[currentPlayer] = index;
+      updateView();
+      landOnSquare();
     }
 
     function restartGame() {
       positions = [0, 0];
       scores = [0, 0];
-      skipTurn = [false, false];
-      currentPlayer = 0;
-      document.getElementById('status').textContent = '';
-      document.getElementById('action-icon').textContent = '';
-      document.getElementById('question-box').style.display = 'none';
-      const overlay = document.querySelector('.victory-overlay');
-      if (overlay) overlay.remove();
-      updateBoard();
-      updateTeacherTip();
-      document.getElementById('roll-btn').disabled = false;
-      document.getElementById('roll-btn-duplicate').disabled = false;
-      playSound(true);
+      currentPlayer = startingPlayer;
+      isBusy = false;
+      awaitingAnswer = false;
+      previousPosition = 0;
+      lastRoll = 1;
+      diceDisplay.innerHTML = diceMarkup(1);
+      overlay.style.display = "none";
+      setStatus("按下擲骰子開始遊戲", "走到題目格後，老師按答對或答錯。");
+      updateView();
     }
 
-    function playSound(correct = true) {
+    function setStartingPlayer(playerIndex) {
+      if (isBusy || awaitingAnswer) return;
+      startingPlayer = playerIndex;
+      currentPlayer = playerIndex;
+      positions = [0, 0];
+      setStatus(`${players[playerIndex].name} 設為先攻`, "按下擲骰子開始遊戲。");
+      updateView();
+    }
+
+    function playSound(isCorrect) {
       const correctAudio = document.getElementById("audio-correct");
       const wrongAudio = document.getElementById("audio-wrong");
-      [correctAudio, wrongAudio].forEach(audio => {
-        audio.pause();
-        audio.currentTime = 0;
-      });
-      (correct ? correctAudio : wrongAudio).play();
+      const audio = isCorrect ? correctAudio : wrongAudio;
+      stopAnswerSounds();
+      audio.play().catch(() => {});
     }
 
-    function showScorePopup(playerName) {
-      const popup = document.getElementById("score-popup");
-      const message = document.getElementById("score-message");
-      message.innerText = `🏁 ${playerName} 獲得 1 分，5 秒後繼續遊戲`;
-      popup.style.display = "flex";
-      setTimeout(() => {
-        popup.style.display = "none";
-      }, 5000);
-    }
-
-    function showScoreAnimation() {
-      const scoreSound = document.getElementById('audio-score');
-      if (scoreSound) { scoreSound.currentTime = 0; scoreSound.play(); }
-      const float = document.getElementById('score-float');
-      float.style.display = 'block';
-      float.style.animation = 'none';
-      float.offsetHeight;
-      float.style.animation = 'floatUp 1s ease-out forwards';
-      setTimeout(() => {
-        float.style.display = 'none';
-      }, 1000);
-      confetti({
-        particleCount: 80,
-        spread: 100,
-        origin: { y: 0.6 }
+    function stopAnswerSounds() {
+      const correctAudio = document.getElementById("audio-correct");
+      const wrongAudio = document.getElementById("audio-wrong");
+      [correctAudio, wrongAudio].forEach(item => {
+        item.pause();
+        item.currentTime = 0;
       });
     }
 
-    function showWinScreen() {
-      const victorySound = document.getElementById('audio-victory');
-      if (victorySound) { victorySound.currentTime = 0; victorySound.play(); }
-      document.getElementById('win-screen').style.display = 'flex';
-      setTimeout(() => {
-        document.getElementById('win-screen').style.display = 'none';
-      }, 3000);
+    function playScoreSound() {
+      const audio = document.getElementById("audio-score");
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
     }
 
-    // 模式切換：切換時僅更新模式變數與教師提示（骰子按鈕始終顯示）
-    document.getElementById("toggle-mode").addEventListener("change", function() {
-      isManualMode = this.checked;
-      updateTeacherTip();
+    function playVictorySound() {
+      const audio = document.getElementById("audio-victory");
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+    }
+
+    rollButton.addEventListener("click", rollDice);
+    correctButton.addEventListener("click", () => judgeAnswer(true));
+    wrongButton.addEventListener("click", () => judgeAnswer(false));
+    restartButton.addEventListener("click", restartGame);
+    manualModeEl.addEventListener("click", () => {
+      manualMode = !manualMode;
+      setStatus(
+        manualMode ? "手動移動模式已開啟" : `請 ${players[currentPlayer].name} 擲骰子`,
+        manualMode ? "點選任一格，就能把目前隊伍移到那裡。" : "準備好就按下擲骰子。"
+      );
+      updateView();
+    });
+    scoreCards.forEach(card => {
+      const playerIndex = Number(card.dataset.player);
+      card.addEventListener("click", () => setStartingPlayer(playerIndex));
+      card.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          setStartingPlayer(playerIndex);
+        }
+      });
     });
 
-    // 初始化提示與棋盤
-    updateTeacherTip();
-    updateBoard();
+    buildBoard();
+    diceDisplay.innerHTML = diceMarkup(1);
+    updateView();
   </script>
-  <audio id="audio-score" preload="auto" src="score.mp3"></audio>
-  <audio id="audio-victory" preload="auto" src="victory.mp3"></audio>
 </body>
 </html>
